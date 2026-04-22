@@ -1288,7 +1288,7 @@
           <span class="dim-node highlight" data-d="4">TABLE</span><span class="dim-arrow">→</span>
           <span class="dim-node" data-d="5">SERIES</span><span class="dim-arrow">→</span>
           <span class="dim-node" data-d="6">DATASET</span><span class="dim-arrow">→</span>
-          <span class="dim-node" data-d="7">INSTANCE</span>
+          <span class="dim-node" data-d="7">M</span>
         </div>
       </div>
     </div>
@@ -1315,8 +1315,15 @@
         <div class="sec-eye">◈ Data Shapes</div>
         <div class="sec-title">WHAT YOU CAN STORE</div>
         <p class="sec-sub">
-          The API speaks in familiar shapes — scalars, columns, rows, tables, time-series, and whole datasets.
+          The API speaks in familiar shapes — scalars, columns, rows, tables, time‑series, and whole datasets.
           Each shape is addressed by a coordinate on the surface; the rest is up to you.
+        </p>
+        <p class="sec-sub" style="margin-top:0.6rem;color:var(--txm);font-size:0.95rem">
+          A small principle from classical geometry runs through the list:
+          <strong style="color:var(--nc)">each level is just a point in the level above it</strong>.
+          A line is a sequence of points; a row is a sequence of values; a table is a sequence of rows;
+          a dataset is a sequence of tables. Climb one rung and yesterday's whole world becomes today's atom.
+          (See Edwin Abbott’s <em>Flatland</em>, 1884 — public domain.)
         </p>
       </div>
       <div class="dims-grid">
@@ -1366,12 +1373,23 @@
         </div>
         <div class="dim-card" data-dim="7">
           <div class="dim-number">7</div>
-          <div class="dim-name">INSTANCE</div>
-          <div class="dim-type">a tenant · atomic from outside</div>
+          <div class="dim-name">INSTANCE · <span style="color:var(--nc)">M</span></div>
+          <div class="dim-type">completion — a point in the next world</div>
           <div class="dim-desc">A complete tenant on the server. Other tenants see it only as an identity, never its
-            contents.</div>
+            contents — the way a whole 3D world would look like a single dot to a 4D observer.</div>
           <div class="dim-ex">kensgames, butterflyfx, your-app</div>
         </div>
+      </div>
+      <div style="max-width:880px;margin:2rem auto 0;padding:1.2rem 1.4rem;border:1px solid rgba(0,255,255,.18);background:rgba(0,255,255,.03);border-radius:6px;font-size:0.92rem;line-height:1.6;color:var(--txm)">
+        <strong style="color:var(--nc);letter-spacing:0.04em">A NOTE ON DIMENSIONS.</strong>
+        Some readers will notice the list stops at seven. Earlier drafts split level 5 into a “stack”
+        and level 6 into a “volume,” but a stack of values <em>is</em> a small volume — they're the same
+        idea wearing different hats, so they collapse to a single rung (the time‑series).
+        The seventh rung, <strong style="color:var(--nc)">M</strong>, is just the word for <em>completion</em>:
+        whatever sits on top is, from the outside, a single point — the seed of the next dimension up.
+        That recursive ladder (a point becomes a line becomes a plane becomes a volume…) is
+        the same one Edwin Abbott sketched in <em>Flatland</em> back in 1884, and it's the only piece
+        of the dimensional picture this page tries to teach.
       </div>
     </div>
   </section>
