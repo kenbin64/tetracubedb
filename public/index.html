@@ -4,12 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TetracubeDB — Manifold Data Processor</title>
+  <title>TetracubeDB — Geometry-Driven Data Processor</title>
   <meta name="description"
-    content="TetracubeDB is a geometry-driven dimensional data processor built on the Schwartz Diamond Gyroid. z=x·y → helix → lattice. 8 Fibonacci dimensions to wholeness (D7=M≈21≈φ²). Knock+handshake privacy model.">
-  <meta property="og:title" content="TetracubeDB — Manifold Data Processor">
+    content="TetracubeDB is a geometry-driven, surface-addressed data processor inspired by classical triply periodic minimal surfaces. REST + WebSocket API, SQLite persistence, multi-tenant namespaces.">
+  <meta property="og:title" content="TetracubeDB — Geometry-Driven Data Processor">
   <meta property="og:description"
-    content="A Schwartz Diamond Gyroid-addressed dimensional database. sin(x)cos(y) + sin(y)cos(z) + sin(z)cos(x) = 0">
+    content="Surface-addressed cells, real-time subscriptions, and multi-tenant namespaces over a familiar REST + WebSocket API.">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1258,38 +1258,37 @@
   <section class="hero">
     <div class="hero-inner">
       <div class="hero-copy">
-        <div class="hero-eyebrow">◈ Manifold Data Processor ◈</div>
+        <div class="hero-eyebrow">◈ Geometry-Driven Data Processor ◈</div>
         <h1>TETRACUBE<br><span class="accent">DB</span></h1>
-        <div class="hero-tagline">GEOMETRY-DRIVEN DIMENSIONAL STORAGE</div>
+        <div class="hero-tagline">SURFACE-ADDRESSED STORAGE</div>
         <p class="hero-desc">
-          The primitive is <strong style="color:var(--nc)">z&nbsp;=&nbsp;x·y</strong>. Rotate 90° — you get a
-          <strong style="color:var(--np)">helix</strong>. A lattice of helices is the
-          <strong style="color:var(--npu)">Schwartz Diamond Gyroid</strong>, and the full lattice
-          <em>is</em> the database. 8 Fibonacci dimensions (0,1,1,2,3,5,8,13).
-          Every node knows its neighbors' addresses — never their contents.
-          Connect two systems as a new dimension: one interconnected lattice.
+          A small, opinionated database that places every cell at a coordinate on a
+          <strong style="color:var(--npu)">triply periodic minimal surface</strong> — the
+          <a href="https://en.wikipedia.org/wiki/Gyroid" target="_blank" rel="noopener"
+            style="color:var(--nc)">gyroid</a>,
+          discovered by Alan Schoen at NASA in 1970. Spatial proximity becomes relational proximity.
+          Standard tools on top: REST, WebSockets, SQLite, Bearer auth.
         </p>
-        <div class="hero-eq">z = x·y &nbsp;→ 90° →&nbsp; helix &nbsp;→ lattice →&nbsp; F(x,y,z) = 0</div>
+        <div class="hero-eq">sin(x)cos(y) + sin(y)cos(z) + sin(z)cos(x) = 0 &nbsp;— Schoen, 1970</div>
         <div class="hero-cta">
           <a href="#portal" class="btn btn-cyan">API Portal</a>
           <a href="#examples" class="btn btn-ghost">View API Docs</a>
-          <a href="#dimensions" class="btn btn-purple">8 Dimensions</a>
+          <a href="#dimensions" class="btn btn-purple">Data Shapes</a>
         </div>
-        <div class="hero-note">REST + WebSocket · SQLite Persistence · ManifoldFunctions · Knock + Handshake</div>
+        <div class="hero-note">REST + WebSocket · SQLite Persistence · Server-Side Hooks · Bearer Auth</div>
       </div>
       <div class="gyroid-widget">
         <canvas id="hero-canvas"></canvas>
-        <div class="gyroid-eq">z = x · y &nbsp;|&nbsp; F(x,y,z) = 0</div>
-        <div class="gyroid-hint">Drag to rotate · Gyroid surface projection · Newton-Raphson convergence</div>
+        <div class="gyroid-eq">gyroid surface projection</div>
+        <div class="gyroid-hint">Drag to rotate · Schoen's gyroid (public domain, 1970)</div>
         <div class="dim-strip" id="dim-strip">
-          <span class="dim-node" data-d="0">VOID</span><span class="dim-arrow">→</span>
-          <span class="dim-node active" data-d="1">POINT</span><span class="dim-arrow">→</span>
-          <span class="dim-node" data-d="2">LINE</span><span class="dim-arrow">→</span>
-          <span class="dim-node" data-d="3">WIDTH</span><span class="dim-arrow">→</span>
-          <span class="dim-node highlight" data-d="4">PLANE</span><span class="dim-arrow">→</span>
-          <span class="dim-node" data-d="5">STACK</span><span class="dim-arrow">→</span>
-          <span class="dim-node" data-d="6">VOLUME</span><span class="dim-arrow">→</span>
-          <span class="dim-node" data-d="7">M</span>
+          <span class="dim-node active" data-d="1">SCALAR</span><span class="dim-arrow">→</span>
+          <span class="dim-node" data-d="2">COLUMN</span><span class="dim-arrow">→</span>
+          <span class="dim-node" data-d="3">ROW</span><span class="dim-arrow">→</span>
+          <span class="dim-node highlight" data-d="4">TABLE</span><span class="dim-arrow">→</span>
+          <span class="dim-node" data-d="5">SERIES</span><span class="dim-arrow">→</span>
+          <span class="dim-node" data-d="6">DATASET</span><span class="dim-arrow">→</span>
+          <span class="dim-node" data-d="7">INSTANCE</span>
         </div>
       </div>
     </div>
@@ -1298,222 +1297,144 @@
   <!-- ══════════════════ STATS STRIP ══════════════════ -->
   <div class="stats-strip">
     <div class="stats-inner">
-      <div class="stat-item"><span class="stat-value">7</span><span class="stat-label">Dimensions</span></div>
+      <div class="stat-item"><span class="stat-value">REST</span><span class="stat-label">+ WebSocket API</span></div>
       <div class="stat-item"><span class="stat-value">∞</span><span class="stat-label">Namespaces</span></div>
-      <div class="stat-item"><span class="stat-value">4</span><span class="stat-label">Newton-Raphson Iters</span></div>
-      <div class="stat-item"><span class="stat-value">D5</span><span class="stat-label">Temporal Stack</span></div>
-      <div class="stat-item"><span class="stat-value">WS</span><span class="stat-label">Real-Time Events</span></div>
-      <div class="stat-item"><span class="stat-value">SHA-256</span><span class="stat-label">Gyroid Addressing</span>
+      <div class="stat-item"><span class="stat-value">SQLite</span><span class="stat-label">Persistence</span></div>
+      <div class="stat-item"><span class="stat-value">Live</span><span class="stat-label">Subscriptions</span></div>
+      <div class="stat-item"><span class="stat-value">Bearer</span><span class="stat-label">Token Auth</span></div>
+      <div class="stat-item"><span class="stat-value">Multi-Tenant</span><span class="stat-label">Namespace
+          Isolation</span>
       </div>
     </div>
   </div>
 
-  <!-- ══════════════════ 7 DIMENSIONS ══════════════════ -->
+  <!-- ══════════════════ DATA SHAPES ══════════════════ -->
   <section class="sec" id="dimensions">
     <div class="sec-inner">
       <div class="sec-hdr">
-        <div class="sec-eye">◈ Dimensional Architecture</div>
-        <div class="sec-title">THE 7 DIMENSIONS</div>
+        <div class="sec-eye">◈ Data Shapes</div>
+        <div class="sec-title">WHAT YOU CAN STORE</div>
         <p class="sec-sub">
-          Every piece of data — scalar, array, table, or event stream — lives at a specific dimensional level
-          on the gyroid surface. Dimensions are not abstractions; they are <em style="color:var(--nc)">geometric
-            coordinates</em>.
+          The API speaks in familiar shapes — scalars, columns, rows, tables, time-series, and whole datasets.
+          Each shape is addressed by a coordinate on the surface; the rest is up to you.
         </p>
       </div>
       <div class="dims-grid">
-        <div class="dim-card" data-dim="0">
-          <div class="dim-number">0</div>
-          <div class="dim-name">VOID</div>
-          <div class="dim-type">null / empty set</div>
-          <div class="dim-desc">The empty set. A cell that exists as a placeholder without value. The geometric origin.
-            Represents absence, not deletion.</div>
-          <div class="dim-ex">∅ → no value, no coordinates</div>
-        </div>
         <div class="dim-card" data-dim="1">
           <div class="dim-number">1</div>
-          <div class="dim-name">POINT</div>
-          <div class="dim-type">scalar · number · string · bool</div>
-          <div class="dim-desc">A single entity. A discrete value at one coordinate on the gyroid surface. The atom of
-            all data.</div>
-          <div class="dim-ex">score = 9999 → gx=5.32, gy=3.88, gz=20.69</div>
+          <div class="dim-name">SCALAR</div>
+          <div class="dim-type">number · string · bool</div>
+          <div class="dim-desc">A single value at one address. The atom of all data.</div>
+          <div class="dim-ex">score = 9999</div>
         </div>
         <div class="dim-card" data-dim="2">
           <div class="dim-number">2</div>
-          <div class="dim-name">LINE</div>
-          <div class="dim-type">array · column</div>
-          <div class="dim-desc">An ordered sequence of POINT values forming a column. One-dimensional data structured
-            along the gyroid's z-axis gradient.</div>
-          <div class="dim-ex">[1, 2, 3, 5, 8, 13] → Fibonacci column</div>
+          <div class="dim-name">COLUMN</div>
+          <div class="dim-type">array · list</div>
+          <div class="dim-desc">An ordered sequence of scalars sharing one logical key.</div>
+          <div class="dim-ex">[1, 1, 2, 3, 5, 8]</div>
         </div>
         <div class="dim-card" data-dim="3">
           <div class="dim-number">3</div>
-          <div class="dim-name">WIDTH</div>
-          <div class="dim-type">object · row · record</div>
-          <div class="dim-desc">A row of named fields. The WIDTH dimension spans multiple coordinates at the same row
-            key across the surface manifold.</div>
-          <div class="dim-ex">{username, score, avatar} → player record</div>
+          <div class="dim-name">ROW</div>
+          <div class="dim-type">object · record</div>
+          <div class="dim-desc">A row of named fields keyed by a row id.</div>
+          <div class="dim-ex">{ username, score, avatar }</div>
         </div>
         <div class="dim-card" data-dim="4">
           <div class="dim-number">4</div>
-          <div class="dim-name">PLANE</div>
-          <div class="dim-type">x × y · one 2D slice · domain alias: table / frame / face</div>
-          <div class="dim-desc">The universal 2D slice. What you <em>call</em> it depends on your domain:
-            data uses a <strong>table</strong>, animation uses a <strong>frame</strong>,
-            3D geometry uses a <strong>face</strong> or layer, a 3D mesh builds from vertices (POINT) →
-            edges (LINE) → faces (PLANE). All are the same dimension. All map as z = x·y on the gyroid.</div>
-          <div class="dim-ex">data: players table · animation: keyframe · geometry: mesh face</div>
+          <div class="dim-name">TABLE</div>
+          <div class="dim-type">rows × columns</div>
+          <div class="dim-desc">A two-dimensional set of rows under one table name within a namespace.</div>
+          <div class="dim-ex">players, items, sessions, scores</div>
         </div>
         <div class="dim-card" data-dim="5">
           <div class="dim-number">5</div>
-          <div class="dim-name">STACK</div>
-          <div class="dim-type">z-axis · stack of delta-planes · domain alias: sequence / timeline / layers</div>
-          <div class="dim-desc">Each step up z is another PLANE recording <em>only what changed</em>.
-            Nothing unchanged is repeated — it is implied by the plane below.
-            Top = current state. Below = history of how it got there. You append, never mutate.
-            In data: delta-rows. In animation: frames. In geometry: layers or vertex sequences. Same dimension.</div>
-          <div class="dim-ex">data: delta stack · animation: frame sequence · geometry: mesh layers · fib=5</div>
+          <div class="dim-name">TIME-SERIES</div>
+          <div class="dim-type">append-only event log</div>
+          <div class="dim-desc">Per-cell history. Push events; the latest is the current state, the rest is replayable
+            history.</div>
+          <div class="dim-ex">score deltas · chat events · game frames</div>
         </div>
         <div class="dim-card" data-dim="6">
           <div class="dim-number">6</div>
-          <div class="dim-name">VOLUME</div>
-          <div class="dim-type">complete body of the stack · total measured extent</div>
-          <div class="dim-desc">The full body formed by all delta-planes stacked along z — the <em>volume</em>.
-            Not the object itself; the measured aggregate of everything inside it.
-            VOLUME is a single point of M. fib=8.</div>
-          <div class="dim-ex">entire namespace · full session history · all deltas combined · fib=8</div>
+          <div class="dim-name">DATASET</div>
+          <div class="dim-type">whole namespace</div>
+          <div class="dim-desc">All tables and time-series under one namespace, treated as a single addressable unit.
+          </div>
+          <div class="dim-ex">an entire app or game's data</div>
         </div>
         <div class="dim-card" data-dim="7">
           <div class="dim-number">7</div>
-          <div class="dim-name">M</div>
-          <div class="dim-type">the whole object · identity · discrete</div>
-          <div class="dim-desc">A complete, discrete, addressable system — treated as a single POINT by anything above
-            it.
-            Identity, not contents. Atomic from the outside. To access contents: change scope (O(1)).
-            fib=13.</div>
-          <div class="dim-ex">a database instance · a microservice · a game · fib=13</div>
+          <div class="dim-name">INSTANCE</div>
+          <div class="dim-type">a tenant · atomic from outside</div>
+          <div class="dim-desc">A complete tenant on the server. Other tenants see it only as an identity, never its
+            contents.</div>
+          <div class="dim-ex">kensgames, butterflyfx, your-app</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ══════════════════ THEORY ══════════════════ -->
+  <!-- ══════════════════ BACKGROUND ══════════════════ -->
   <section class="sec theory-sec" id="theory">
     <div class="sec-inner">
       <div class="theory-inner">
         <div class="theory-text">
-          <h2>THE GEOMETRY</h2>
+          <h2>BACKGROUND</h2>
           <p>
-            The primitive is <strong style="color:var(--nc)">z = x·y</strong>. Rotate that 90° and you get a helix.
-            A lattice of helices is the <strong style="color:var(--npu)">Schwartz Diamond Gyroid</strong>:
+            TetracubeDB is inspired by classical work on
+            <a href="https://en.wikipedia.org/wiki/Triply_periodic_minimal_surface" target="_blank" rel="noopener"
+              style="color:var(--nc)">triply periodic minimal surfaces</a>
+            — in particular the
+            <a href="https://en.wikipedia.org/wiki/Gyroid" target="_blank" rel="noopener"
+              style="color:var(--nc)">gyroid</a>,
+            discovered by Alan Schoen at NASA in 1970
+            (<a href="https://ntrs.nasa.gov/citations/19700020472" target="_blank" rel="noopener"
+              style="color:var(--txm)">NASA TN D-5541</a>).
+            The gyroid is well-known and in the public domain; it shows up in butterfly wings, soap films,
+            block-copolymer self-assembly, and countless graphics shaders.
           </p>
           <p style="font-family:monospace;color:var(--nc);font-size:0.88rem;padding:0.4rem 0;letter-spacing:0.04em">
-            z = x·y &nbsp;→&nbsp; 90° &nbsp;→&nbsp; helix &nbsp;→&nbsp; lattice &nbsp;→&nbsp; F(x,y,z) = 0
+            sin(x)cos(y) + sin(y)cos(z) + sin(z)cos(x) = 0
           </p>
           <p>
-            The full lattice surface <em>is</em> the database. Every cell lives on the surface.
-            8 Fibonacci dimensions (0,1,1,2,3,5,8,13), each Dₙ a single point of Dₙ₊₁.
-            D5 = STACK is the z-axis: a stack of delta-planes, each recording only what changed.
-            D6 = VOLUME is the complete measured body of that stack.
-            D7 = M is the whole object — identity, not contents.
+            That equation is just the gyroid's level set — textbook math, free for anyone to use.
+            What TetracubeDB <em>does</em> with it is treat the surface as an <strong style="color:var(--nc)">addressing
+              scheme</strong>:
+            related cells end up close to each other in space, so spatial queries become relational queries.
           </p>
           <p>
-            The <strong style="color:var(--nc)">dimension is universal</strong> — the label is a domain alias.
-            What data calls a <em>table</em>, animation calls a <em>frame</em>, and 3D geometry calls a <em>face</em>
-            are all D4 PLANE. A mesh builds exactly as the model predicts: vertex (POINT) → edge (LINE) →
-            face (PLANE) → layers (STACK) → full mesh (VOLUME) → object (M).
-            Every domain maps onto the same 8 dimensions and the same gyroid surface.
-            z = x·y is the primitive for all of them.
+            On top of that the system exposes a small, conventional API surface:
+            <strong style="color:var(--nc)">REST</strong> for reads and writes,
+            <strong style="color:var(--nc)">WebSockets</strong> for live subscriptions,
+            <strong style="color:var(--nc)">SQLite</strong> for persistence, and
+            <strong style="color:var(--nc)">Bearer tokens</strong> for auth
+            (industry standards, all of them).
           </p>
           <p>
-            The delta model: you never mutate a record. You add a new PLANE (a frame) with only the fields
-            that changed. The <strong style="color:var(--nc)">top plane is always the current state</strong>.
-            Every plane below shows how it got there. Replaying the stack forward reconstructs any moment.
-            Querying the top gives O(1) current state without scanning history.
+            The data model is also deliberately familiar: scalars, columns, rows, tables,
+            time-series, and whole datasets. If you've used a key-value store, a document database,
+            or an event log, you already know the shapes.
           </p>
-          <p>
-            Every M is <strong style="color:var(--nc)">atomic and discrete</strong> from the outside.
-            To access its contents you do not traverse it — you <strong style="color:var(--ny)">change scope</strong>.
-            Knock + handshake → you enter a new coordinate space at the next scale down. The outer M is forgotten.
-            <strong style="color:var(--ng)">O(1)</strong> at every level. The namespace <em>is</em> the scope.
-            The same 8 dimensions repeat at every scale, from a single cell to the entire internet.
-            <strong style="color:var(--np)">The pattern does not break at any scale.</strong>
-          <div class="theorem-box">
-            <div class="theorem-label">PRIMITIVE: z = x · y</div>
-            <div class="theorem-eq">z = x · y</div>
-            <div class="theorem-note">The primitive of everything. A 2D slice (x·y) stacked along z. Rotate z=x·y
-              90°: it becomes a helix. All domains use this same primitive.</div>
-          </div>
-          <div class="theorem-box">
-            <div class="theorem-label">DOMAIN ALIASES · ONE DIMENSION, MANY NAMES</div>
-            <div class="theorem-eq">
-              data: point · column · row · table · delta-stack · volume · dataset<br>
-              animation: sample · channel · track · frame · sequence · reel · scene<br>
-              geometry: vertex · edge · — · face · layers · mesh · object
-            </div>
-            <div class="theorem-note">The dimension is universal. The label is a domain alias. A database table, an
-              animation frame, and a mesh face are all D4 PLANE — x·y on the gyroid. A 3D mesh builds exactly as
-              the model predicts: vertex (POINT) → edge (LINE) → face (PLANE) → layers (STACK) → full mesh (VOLUME)
-              → object (M). Every domain maps onto the same 8 dimensions and the same Schwartz Diamond surface.</div>
-          </div>
-          <div class="theorem-box">
-            <div class="theorem-label">HELIX → LATTICE → SCHWARTZ DIAMOND</div>
-            <div class="theorem-eq">helix lattice ≡ F(x,y,z) = sin(x)cos(y) + sin(y)cos(z) + sin(z)cos(x) = 0</div>
-            <div class="theorem-note">One helix = one data column. A lattice of helices = the gyroid surface = the
-              entire database. Triply periodic, mean curvature = 0.</div>
-          </div>
-          <div class="theorem-box">
-            <div class="theorem-label">FIBONACCI DIMENSIONS → φ · VOLUME ≠ M</div>
-            <div class="theorem-eq">D0(0)→D1(1)→D2(1)→D3(2)→D4(3)→D5(5)→D6/VOL(8)→D7/M(13)</div>
-            <div class="theorem-note">Each Dₙ is a single point of Dₙ₊₁. D5=STACK is the z-axis of delta-planes.
-              D6=VOLUME is the complete measured body of the stack. D7=M is the whole object (identity).
-              13/8=1.625→φ. One M = one POINT at the next scale.</div>
-          </div>
-          <div class="theorem-box">
-            <div class="theorem-label">DELTA STACK · APPEND-ONLY · TOP = CURRENT STATE</div>
-            <div class="theorem-eq">z₊₁ = PLANE(only changed fields) · z_top = current · z₀…ₙ₋₁ = history</div>
-            <div class="theorem-note">Never mutate. Add a new PLANE with only what changed. Unchanged fields
-              are implied by the plane below — not repeated. Top of the stack = current state.
-              Replay any slice for point-in-time queries. Not rows updated: planes appended.
-              This is dimensional programming.
-            </div>
-            <div class="theorem-box">
-              <div class="theorem-label">KNOCK + HANDSHAKE · topology public, content private</div>
-              <div class="theorem-eq">knock = SHA-256( myAddr + ":" + neighborAddr + ":" + nonce )</div>
-              <div class="theorem-note">Every node knows neighbors' surface addresses — computable from F=0. Content
-                requires: knock (present address) → handshake (owner grants scoped token). Secure by geometry, not by
-                obscurity.</div>
-            </div>
-            <div class="theorem-box">
-              <div class="theorem-label">GYROID ADDRESS HASH</div>
-              <div class="theorem-eq">addr = SHA-256( namespace + ":" + dim + ":" + gx + "," + gy + "," + key )</div>
-              <div class="theorem-note">Every cell gets a unique cryptographic address derived from its surface
-                position.
-              </div>
-            </div>
-          </div>
+          <p style="color:var(--txm);font-size:0.95rem">
+            Note: this page is intentionally light on internals. The novel parts of the system
+            — how exactly addresses are derived, how tenants are isolated cryptographically,
+            and how the runtime ties it all together — are not documented publicly.
+          </p>
           <div class="theory-visual">
-            <div class="theory-stat"><span class="ts-icon">⬡</span><span class="ts-label">Surface Type</span><span
-                class="ts-val">Triply Periodic Minimal</span></div>
+            <div class="theory-stat"><span class="ts-icon">⬡</span><span class="ts-label">Surface</span><span
+                class="ts-val">Gyroid (Schoen, 1970, public)</span></div>
             <div class="theory-stat"><span class="ts-icon">∇</span><span class="ts-label">Mean Curvature</span><span
-                class="ts-val">0 everywhere</span></div>
-            <div class="theory-stat"><span class="ts-icon">↺</span><span class="ts-label">Convergence</span><span
-                class="ts-val">4 Newton-Raphson iterations</span></div>
-            <div class="theory-stat"><span class="ts-icon">⧭</span><span class="ts-label">Lattice Period</span><span
-                class="ts-val">2π / GRID_SCALE</span></div>
+                class="ts-val">0 everywhere (textbook TPMS)</span></div>
             <div class="theory-stat"><span class="ts-icon">◉</span><span class="ts-label">Spatial Query</span><span
-                class="ts-val">Ball radius on gyroid surface</span></div>
+                class="ts-val">Proximity on the surface</span></div>
             <div class="theory-stat"><span class="ts-icon">#</span><span class="ts-label">Cell Address</span><span
-                class="ts-val">SHA-256 of coords + key</span></div>
-            <div class="theory-stat"><span class="ts-icon">∫</span><span class="ts-label">Inflection Points</span><span
-                class="ts-val">Tracked per gx,gy slice</span></div>
-            <div class="theory-stat"><span class="ts-icon">↑</span><span class="ts-label">Dimension
-                Promotion</span><span class="ts-val">POINT→LINE→WIDTH→PLANE→STACK→VOLUME→M</span></div>
-            <div class="theory-stat"><span class="ts-icon">🤝</span><span class="ts-label">Inter-lattice</span><span
-                class="ts-val">new system = new dimension on same lattice</span></div>
-            <div class="theory-stat"><span class="ts-icon">φ</span><span class="ts-label">Fibonacci Spiral</span><span
-                class="ts-val">0,1,1,2,3,5,8,13→21 ≈ φ² · D7=M</span></div>
+                class="ts-val">SHA-256 (NIST FIPS 180-4)</span></div>
+            <div class="theory-stat"><span class="ts-icon">🔐</span><span class="ts-label">Auth</span><span
+                class="ts-val">Bearer tokens (RFC 6750)</span></div>
             <div class="theory-stat"><span class="ts-icon">⚡</span><span class="ts-label">Persistence</span><span
-                class="ts-val">SQLite · /var/lib/tetracubedb</span></div>
+                class="ts-val">SQLite</span></div>
             <div class="theory-stat"><span class="ts-icon">⬡</span><span class="ts-label">Real-Time</span><span
                 class="ts-val">WebSocket subscriptions per table</span></div>
           </div>
@@ -1532,44 +1453,46 @@
         <div class="step-card">
           <div class="step-n">01</div>
           <div class="step-icon">📐</div>
-          <div class="step-title">GYROID COORDINATES</div>
-          <div class="step-desc">Your address (namespace/table/row/col) is hashed into (gx,gy) using djb2. gz₀ = gx·gy
-            seeds the Relation Surface. Newton-Raphson solves F=0 in 4 iterations.</div>
+          <div class="step-title">SURFACE ADDRESSING</div>
+          <div class="step-desc">Each cell is assigned a coordinate on the gyroid surface so that related cells
+            end up close together. Spatial proximity queries naturally double as relational queries.</div>
         </div>
         <div class="step-card">
           <div class="step-n">02</div>
           <div class="step-icon">🗄️</div>
           <div class="step-title">PERSISTENT CELLS</div>
-          <div class="step-desc">Values are stored in SQLite at /var/lib/tetracubedb — outside the app directory. Zero
-            data loss on redeploy. Gyroid coordinates stored alongside every cell.</div>
+          <div class="step-desc">Values are persisted in SQLite outside the application directory, so a redeploy
+            never loses data. Every cell carries its address with it.</div>
         </div>
         <div class="step-card">
           <div class="step-n">03</div>
           <div class="step-icon">⚡</div>
-          <div class="step-title">MANIFOLD FUNCTIONS</div>
-          <div class="step-desc">Register handlers at patterns like "ns:table:col" with wildcards. Every write invokes
-            matching functions — auth, lobby state machines, leaderboard ranking, session replay.</div>
+          <div class="step-title">SERVER-SIDE HOOKS</div>
+          <div class="step-desc">Register hooks against table or column patterns. Every matching write fires
+            the hook — useful for validation, derived fields, and external side effects.</div>
         </div>
         <div class="step-card">
           <div class="step-n">04</div>
           <div class="step-icon">📡</div>
-          <div class="step-title">REAL-TIME EVENTS</div>
-          <div class="step-desc">WebSocket subscriptions fire whenever a matching cell changes. Clients subscribe per
-            table or namespace. No polling. Push-only live updates.</div>
+          <div class="step-title">LIVE SUBSCRIPTIONS</div>
+          <div class="step-desc">Clients open a WebSocket and subscribe to a table or namespace.
+            Updates are pushed as they happen — no polling.</div>
         </div>
         <div class="step-card">
           <div class="step-n">05</div>
           <div class="step-icon">🔐</div>
           <div class="step-title">BEARER AUTH</div>
-          <div class="step-desc">API clients authenticate with client_id:api_key Bearer tokens. bcrypt-hashed keys.
-            Namespace-scoped access control. Admin flag for system operations.</div>
+          <div class="step-desc">REST and WebSocket clients authenticate with standard
+            <code style="color:var(--ny)">Bearer</code> tokens (RFC 6750).
+            Stored hashes use bcrypt; access is scoped per namespace.
+          </div>
         </div>
         <div class="step-card">
           <div class="step-n">06</div>
           <div class="step-icon">🌐</div>
           <div class="step-title">MULTI-TENANT</div>
-          <div class="step-desc">Multiple applications share one TetracubeDB instance via namespaces. kensgames.com is a
-            tenant. Your application can be next. Complete namespace isolation.</div>
+          <div class="step-desc">Multiple applications share a single TetracubeDB instance via namespace isolation.
+            Each tenant sees only its own data.</div>
         </div>
       </div>
     </div>
@@ -1585,26 +1508,24 @@
       <div class="code-tabs">
         <button class="code-tab active" onclick="showTab('set')">Set Cell</button>
         <button class="code-tab" onclick="showTab('get')">Get / Row</button>
-        <button class="code-tab" onclick="showTab('stack')">D5 Stack</button>
+        <button class="code-tab" onclick="showTab('stack')">Time-Series</button>
         <button class="code-tab" onclick="showTab('ws')">WebSocket</button>
         <button class="code-tab" onclick="showTab('client')">JS Client</button>
       </div>
 
       <div id="tab-set" class="code-panel active">
-        <pre><code><span class="cm"># Store a POINT (D1) — value gets gyroid coordinates automatically</span>
+        <pre><code><span class="cm"># Store a value</span>
 <span class="kw">POST</span> /v1/cell/:namespace/:table/:row/:col
 Authorization: Bearer client_id:api_key
 Content-Type: application/json
 
 { <span class="st">"value"</span>: <span class="nb">9999</span> }
 
-<span class="cm"># Response — includes gyroid surface coordinates</span>
+<span class="cm"># Response</span>
 {
   <span class="st">"ok"</span>: <span class="kw">true</span>,
-  <span class="st">"addr"</span>: <span class="st">"497574a07dc87faf..."</span>,   <span class="cm">// SHA-256 surface address</span>
-  <span class="st">"gx"</span>: <span class="nb">5.325810</span>, <span class="st">"gy"</span>: <span class="nb">3.885794</span>, <span class="st">"gz"</span>: <span class="nb">20.695005</span>,
-  <span class="st">"dim"</span>: <span class="nb">1</span>,           <span class="cm">// POINT</span>
-  <span class="st">"processed"</span>: [{ <span class="st">"pattern"</span>: <span class="st">"auto-delta-tracker"</span>, <span class="st">"ok"</span>: <span class="kw">true</span> }]
+  <span class="st">"addr"</span>: <span class="st">"…"</span>,           <span class="cm">// opaque cell address</span>
+  <span class="st">"hooks"</span>: [{ <span class="st">"pattern"</span>: <span class="st">"auto-history"</span>, <span class="st">"ok"</span>: <span class="kw">true</span> }]
 }</code></pre>
       </div>
 
@@ -1613,34 +1534,32 @@ Content-Type: application/json
 <span class="kw">GET</span> /v1/cell/kensgames/players/user-ken/score
 Authorization: Bearer client_id:api_key
 
-→ { <span class="st">"value"</span>: <span class="nb">9999</span>, <span class="st">"dim"</span>: <span class="nb">1</span>, <span class="st">"dim_name"</span>: <span class="st">"point"</span>, <span class="st">"gx"</span>: ..., <span class="st">"gy"</span>: ..., <span class="st">"gz"</span>: ... }
+→ { <span class="st">"value"</span>: <span class="nb">9999</span> }
 
-<span class="cm"># Get entire row — returns D3 WIDTH record</span>
+<span class="cm"># Get an entire row</span>
 <span class="kw">GET</span> /v1/row/kensgames/players/user-ken
 
-→ { <span class="st">"_row"</span>: <span class="st">"user-ken"</span>, <span class="st">"_dim"</span>: <span class="nb">3</span>, <span class="st">"score"</span>: <span class="nb">9999</span>, <span class="st">"username"</span>: <span class="st">"KenMaster"</span>,
-    <span class="st">"_gyroid"</span>: { <span class="st">"gx"</span>: <span class="nb">5.32</span>, <span class="st">"gy"</span>: <span class="nb">3.88</span>, <span class="st">"gz"</span>: <span class="nb">20.69</span> } }
+→ { <span class="st">"_row"</span>: <span class="st">"user-ken"</span>, <span class="st">"score"</span>: <span class="nb">9999</span>, <span class="st">"username"</span>: <span class="st">"KenMaster"</span> }
 
-<span class="cm"># Scan full table — returns D4 PLANE</span>
+<span class="cm"># Scan a full table</span>
 <span class="kw">GET</span> /v1/table/kensgames/players
 
-<span class="cm"># Gyroid radius query — find all cells within surface distance</span>
-<span class="kw">POST</span> /v1/query/radius
-{ <span class="st">"namespace"</span>: <span class="st">"kensgames"</span>, <span class="st">"gx"</span>: <span class="nb">5.3</span>, <span class="st">"gy"</span>: <span class="nb">3.9</span>, <span class="st">"gz"</span>: <span class="nb">20.7</span>, <span class="st">"radius"</span>: <span class="nb">2.0</span> }</code></pre>
+<span class="cm"># Proximity query — find related cells nearby on the surface</span>
+<span class="kw">POST</span> /v1/query/near
+{ <span class="st">"namespace"</span>: <span class="st">"kensgames"</span>, <span class="st">"of"</span>: <span class="st">"players/user-ken/score"</span>, <span class="st">"radius"</span>: <span class="nb">2.0</span> }</code></pre>
       </div>
 
       <div id="tab-stack" class="code-panel">
-        <pre><code><span class="cm"># Push delta to D5 STACK — temporal / event sequence</span>
+        <pre><code><span class="cm"># Append an event to a cell's history (time-series)</span>
 <span class="kw">POST</span> /v1/stack/kensgames/score_history/user-ken/score
 { <span class="st">"delta"</span>: { <span class="st">"score"</span>: <span class="nb">12500</span>, <span class="st">"ts"</span>: <span class="nb">1745001000</span> } }
 
-→ { <span class="st">"ok"</span>: <span class="kw">true</span>, <span class="st">"seq"</span>: <span class="nb">2</span>, <span class="st">"gz"</span>: <span class="nb">23.387</span> }   <span class="cm">// gz encodes the Relation Surface z=x·y</span>
+→ { <span class="st">"ok"</span>: <span class="kw">true</span>, <span class="st">"seq"</span>: <span class="nb">2</span> }
 
-<span class="cm"># Read stack — full temporal series</span>
+<span class="cm"># Read the full event series</span>
 <span class="kw">GET</span> /v1/stack/kensgames/score_history/user-ken/score
 
 → {
-    <span class="st">"_dim"</span>: <span class="nb">5</span>,                   <span class="cm">// STACK</span>
     <span class="st">"frames"</span>: [
       { <span class="st">"seq"</span>: <span class="nb">1</span>, <span class="st">"delta"</span>: { <span class="st">"score"</span>: <span class="nb">9999</span> },  <span class="st">"at"</span>: <span class="nb">1776787769</span> },
       { <span class="st">"seq"</span>: <span class="nb">2</span>, <span class="st">"delta"</span>: { <span class="st">"score"</span>: <span class="nb">12500</span> }, <span class="st">"at"</span>: <span class="nb">1776787770</span> }
@@ -1686,13 +1605,13 @@ ws.<span class="fn">onmessage</span> = e => {
   namespace:<span class="st">'myapp'</span>
 });
 
-<span class="cm">// Write a POINT (D1)</span>
+<span class="cm">// Write a value</span>
 await db.<span class="fn">set</span>(<span class="st">'users'</span>, <span class="st">'alice'</span>, <span class="st">'score'</span>, <span class="nb">4200</span>);
 
-<span class="cm">// Read a row (D3 WIDTH)</span>
+<span class="cm">// Read a row</span>
 <span class="kw">const</span> player = await db.<span class="fn">getRow</span>(<span class="st">'users'</span>, <span class="st">'alice'</span>);
 
-<span class="cm">// Push to stack (D5 STACK)</span>
+<span class="cm">// Append to a cell's event series</span>
 await db.<span class="fn">pushDelta</span>(<span class="st">'events'</span>, <span class="st">'alice'</span>, <span class="st">'action'</span>, { move: <span class="st">'jump'</span>, t: <span class="fn">Date.now</span>() });
 
 <span class="cm">// Real-time subscription</span>
@@ -1708,17 +1627,15 @@ await db.<span class="fn">connectWS</span>();</code></pre>
       <div class="sec-hdr">
         <div class="sec-eye">◈ Applications</div>
         <div class="sec-title">WHO IT'S FOR</div>
-        <p class="sec-sub">TetracubeDB is the hub of every manifold-based application. Any project I build lives here.
-        </p>
+        <p class="sec-sub">TetracubeDB is the shared backend for everything I build. Here's where it fits.</p>
       </div>
       <div class="cases-grid">
         <div class="case-card">
           <div class="case-icon">🎮</div>
           <div class="case-title">GAME PLATFORMS</div>
           <div class="case-desc">
-            KensGames.com runs as a client tenant. Player profiles (D3), session replays (D5),
-            leaderboard ranking (z=x·y Relation Surface), lobby state machines — all as ManifoldFunctions
-            registered on the gyroid surface.
+            KensGames.com runs on it as a tenant. Player profiles, session history,
+            leaderboards, and lobby state all live in standard tables and time-series.
           </div>
           <div class="case-tags">
             <span class="case-tag">auth</span><span class="case-tag">lobby</span>
@@ -1727,11 +1644,10 @@ await db.<span class="fn">connectWS</span>();</code></pre>
         </div>
         <div class="case-card">
           <div class="case-icon">📊</div>
-          <div class="case-title">ANALYTICS ENGINES</div>
+          <div class="case-title">ANALYTICS &amp; EVENTS</div>
           <div class="case-desc">
-            Every write creates a D5 STACK delta automatically. Temporal series, trends,
-            event sourcing — the entire event log is the database.
-            Replay any session from seq=1 forward.
+            Every cell can keep an append-only event history. Trends, replays,
+            and event sourcing fall out of the same primitive.
           </div>
           <div class="case-tags">
             <span class="case-tag">event-sourcing</span><span class="case-tag">time-series</span>
@@ -1742,39 +1658,36 @@ await db.<span class="fn">connectWS</span>();</code></pre>
           <div class="case-icon">🏗️</div>
           <div class="case-title">APP RUNTIME BACKEND</div>
           <div class="case-desc">
-            Not just storage — a full application processor. Register ManifoldFunctions
-            at patterns. They fire on every matching write.
-            Business logic lives on the surface, not in the client.
+            Not just storage. Server-side hooks fire on matching writes,
+            so validation and small business rules live next to the data.
           </div>
           <div class="case-tags">
-            <span class="case-tag">serverless-logic</span><span class="case-tag">event-driven</span>
-            <span class="case-tag">functions</span>
+            <span class="case-tag">server-hooks</span><span class="case-tag">event-driven</span>
+            <span class="case-tag">backend</span>
           </div>
         </div>
         <div class="case-card">
           <div class="case-icon">🔬</div>
-          <div class="case-title">RESEARCH &amp; GEOMETRY</div>
+          <div class="case-title">SPATIAL &amp; PROXIMITY</div>
           <div class="case-desc">
-            The gyroid surface is itself a research artifact. Inflection point detection,
-            curvature-based queries, proximity search, surface projection.
-            A geometry engine as much as a database.
+            Because cells are placed on a surface, proximity queries are first-class.
+            Useful for related-record lookup, recommendation, and clustering experiments.
           </div>
           <div class="case-tags">
-            <span class="case-tag">gyroid</span><span class="case-tag">spatial-query</span>
-            <span class="case-tag">manifold</span>
+            <span class="case-tag">spatial-query</span><span class="case-tag">proximity</span>
           </div>
         </div>
         <div class="case-card">
           <div class="case-icon">🏢</div>
           <div class="case-title">FOR EMPLOYERS</div>
           <div class="case-desc">
-            This project demonstrates: custom geometry engines, Newton-Raphson numerical methods,
-            multi-tenant REST API design, real-time WebSocket architecture,
-            SQLite persistence patterns, and a novel dimensional type system — all from scratch.
+            This project demonstrates: multi-tenant REST API design, real-time WebSocket
+            architecture, SQLite persistence, secure Bearer-token auth, and a working
+            geometry-driven addressing scheme — all built from the ground up.
           </div>
           <div class="case-tags">
-            <span class="case-tag">systems-design</span><span class="case-tag">algorithms</span>
-            <span class="case-tag">full-stack</span><span class="case-tag">original-research</span>
+            <span class="case-tag">systems-design</span><span class="case-tag">api-design</span>
+            <span class="case-tag">full-stack</span>
           </div>
         </div>
         <div class="case-card">
@@ -1782,9 +1695,7 @@ await db.<span class="fn">connectWS</span>();</code></pre>
           <div class="case-title">MULTI-TENANT SAAS</div>
           <div class="case-desc">
             Multiple applications share one instance via namespace isolation.
-            Each tenant gets their own gyroid region.
-            Bearer token auth with namespace-scoped access control.
-            Add new clients via the admin API.
+            Bearer-token auth scopes access per tenant. New tenants are added by the admin API.
           </div>
           <div class="case-tags">
             <span class="case-tag">multi-tenant</span><span class="case-tag">namespaces</span>
@@ -1903,8 +1814,8 @@ await db.<span class="fn">connectWS</span>();</code></pre>
     <div class="footer-inner">
       <div class="footer-brand">
         <span class="logo">TETRACUBE<span>DB</span></span>
-        <p>A geometry-driven dimensional data processor built on the Schwartz Diamond Gyroid surface.
-          The hub of every Manifold application.</p>
+        <p>A geometry-driven, surface-addressed data processor.
+          REST, WebSockets, SQLite, Bearer auth. Inspired by Schoen's gyroid (1970, public domain).</p>
       </div>
       <div class="footer-col">
         <h4>API</h4>
@@ -1959,7 +1870,7 @@ await db.<span class="fn">connectWS</span>();</code></pre>
             const gx = (i / STEPS) * Math.PI * 4 - Math.PI * 2;
             const gy = (j / STEPS) * Math.PI * 4 - Math.PI * 2;
             let gz = gx * gy;
-            // Newton-Raphson (2 iters for bg)
+            // refine onto the surface
             for (let k = 0; k < 2; k++) {
               const f = gyroid(gx, gy, gz);
               const dfz = -Math.sin(gz) * Math.cos(gx) - Math.sin(gy) * Math.cos(gz) + Math.cos(gz) * Math.cos(gy);
@@ -2085,7 +1996,7 @@ await db.<span class="fn">connectWS</span>();</code></pre>
             const gx = -RANGE + (i / STEPS) * RANGE * 2;
             const gy = -RANGE + (j / STEPS) * RANGE * 2;
             let gz = gx * gy;
-            // Newton-Raphson (4 iters)
+            // refine onto the surface (4 iters)
             for (let k = 0; k < 4; k++) {
               const f = gyroid(gx, gy, gz);
               const dfz = -Math.sin(gz) * Math.cos(gx) - Math.sin(gy) * Math.cos(gz) + Math.cos(gz) * Math.cos(gy);
@@ -2227,10 +2138,10 @@ await db.<span class="fn">connectWS</span>();</code></pre>
 
       const rows = [
         ['Cells', stats.cells],
-        ['Stack Frames', stats.stacks],
+        ['Series Frames', stats.stacks],
         ['Clients', stats.clients],
         ['Schemas', stats.schemas],
-        ['DB Path', stats.db_path || '/var/lib/tetracubedb/tetracube.db']
+        ['DB Path', stats.db_path || '—']
       ];
 
       document.getElementById('admin-stats').innerHTML = rows.map(([label, val]) => `
