@@ -1589,6 +1589,17 @@
           columns in a spreadsheet &mdash; you've been doing dimensional arithmetic your whole life.
         </p>
 
+        <figure style="margin:1.6rem 0 0.4rem;text-align:center">
+          <canvas id="helix-canvas" width="720" height="320"
+            style="width:100%;max-width:720px;height:auto;background:rgba(0,255,255,0.03);border:1px solid rgba(0,255,255,0.18);border-radius:6px;display:block;margin:0 auto"></canvas>
+          <figcaption style="margin-top:0.5rem;color:var(--txm);font-size:0.85rem;line-height:1.5">
+            Two copies of <code style="color:var(--nc)">z = x &middot; y</code> traced as helices, joined
+            at 90&deg; on the x-axis and rotating slowly. One helix is the surface read along&nbsp;y;
+            the other is the same surface read along&nbsp;z. Together they drill out the saddle that
+            <code style="color:var(--nc)">z = x &middot; y</code> describes.
+          </figcaption>
+        </figure>
+
         <h3 style="color:var(--nc);letter-spacing:0.06em;margin-top:1.8rem">THE GYROID: THE FABRIC OF DIMENSIONS</h3>
         <p>
           So if <code style="color:var(--nc)">z = x &middot; y</code> is the <em>rule</em> for climbing
@@ -2348,6 +2359,127 @@ await db.<span class="fn">connectWS</span>();</code></pre>
       }
 
       window.addEventListener('resize', () => { resize(); surf = null; });
+      resize(); draw();
+    })();
+
+    /* ──────────────────────────────────────────
+       z = x*y HELIX-DRILL ANIMATION
+       Two helices joined at 90° around the x-axis,
+       rotating slowly like a drill bit.
+    ─────────────────────────────────────────── */
+    (function () {
+      const canvas = document.getElementById('helix-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let W = canvas.width, H = canvas.height;
+
+      function resize() {
+        const rect = canvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = Math.floor(rect.width * dpr);
+        canvas.height = Math.floor(rect.height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        W = rect.width; H = rect.height;
+      }
+
+      // Build the two helix point sets in (x, y, z) local coords.
+      // x runs along the drill axis; the helix wraps around it.
+      // r(x) = x represents the "width" of z = x*y (radius grows with x).
+      const SAMPLES = 260;
+      const X_MIN = -3.2, X_MAX = 3.2;
+      const TURNS = 3.2;            // how many full wraps over the x range
+      function buildHelix(phase0) {
+        const pts = [];
+        for (let i = 0; i < SAMPLES; i++) {
+          const t = i / (SAMPLES - 1);
+          const x = X_MIN + (X_MAX - X_MIN) * t;
+          const r = Math.abs(x) * 0.55 + 0.15;          // thickness grows with |x|
+          const theta = phase0 + t * Math.PI * 2 * TURNS;
+          pts.push({ x, y: Math.cos(theta) * r, z: Math.sin(theta) * r });
+        }
+        return pts;
+      }
+      const helixA = buildHelix(0);
+      const helixB = buildHelix(Math.PI / 2);            // joined at 90° on x-axis
+
+      let spin = 0;
+      const SPIN_SPEED = 0.0035;                          // slow drill rotation
+
+      function project(p, cx, cy, scale) {
+        // Rotate around x-axis by `spin`, then a small fixed tilt for depth,
+        // then orthographic project (x, y) -> screen, with z modulating size/alpha.
+        const cs = Math.cos(spin), sn = Math.sin(spin);
+        const y1 = p.y * cs - p.z * sn;
+        const z1 = p.y * sn + p.z * cs;
+        // small fixed tilt around the y-axis so we see depth
+        const TILT = 0.35;
+        const ct = Math.cos(TILT), st = Math.sin(TILT);
+        const x2 = p.x * ct + z1 * st;
+        const z2 = -p.x * st + z1 * ct;
+        return {
+          sx: cx + x2 * scale,
+          sy: cy - y1 * scale,
+          depth: z2
+        };
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+
+        const cx = W / 2, cy = H / 2;
+        const scale = Math.min(W, H) * 0.18;
+
+        // Draw the x-axis (the drill shaft) faintly
+        const axA = project({ x: X_MIN - 0.6, y: 0, z: 0 }, cx, cy, scale);
+        const axB = project({ x: X_MAX + 0.6, y: 0, z: 0 }, cx, cy, scale);
+        ctx.strokeStyle = 'rgba(136,136,170,0.35)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(axA.sx, axA.sy);
+        ctx.lineTo(axB.sx, axB.sy);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Project both helices and z-sort segment-by-segment so the back arc
+        // dims behind the front one (cheap painters approximation).
+        function projectAll(helix) {
+          return helix.map(p => project(p, cx, cy, scale));
+        }
+        const ptsA = projectAll(helixA);
+        const ptsB = projectAll(helixB);
+
+        function drawHelix(pts, hue) {
+          for (let i = 0; i < pts.length - 1; i++) {
+            const a = pts[i], b = pts[i + 1];
+            const depth = (a.depth + b.depth) * 0.5;
+            // depth in roughly [-1.5, 1.5]; map to alpha + width
+            const t = Math.max(0, Math.min(1, (depth + 1.5) / 3));
+            const alpha = 0.25 + 0.65 * t;
+            const w = 1 + 1.6 * t;
+            ctx.strokeStyle = hue.replace('A', alpha.toFixed(3));
+            ctx.lineWidth = w;
+            ctx.beginPath();
+            ctx.moveTo(a.sx, a.sy);
+            ctx.lineTo(b.sx, b.sy);
+            ctx.stroke();
+          }
+        }
+
+        drawHelix(ptsA, 'rgba(0,255,255,A)');     // cyan helix
+        drawHelix(ptsB, 'rgba(170,0,255,A)');     // purple helix (90° offset)
+
+        // tiny axis labels
+        ctx.fillStyle = 'rgba(136,136,170,0.7)';
+        ctx.font = '11px monospace';
+        ctx.fillText('x', axB.sx + 6, axB.sy + 4);
+        ctx.fillText('z = x · y', 12, 18);
+
+        spin += SPIN_SPEED;
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('resize', resize);
       resize(); draw();
     })();
 
