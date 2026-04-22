@@ -1242,6 +1242,7 @@
         <li><a href="#dimensions">Dimensions</a></li>
         <li><a href="#theory">Geometry</a></li>
         <li><a href="#howto">How It Works</a></li>
+        <li><a href="#dimensions">Learn</a></li>
         <li><a href="#examples">API</a></li>
         <li><a href="#usecases">Use Cases</a></li>
         <li><a href="#games">Games</a></li>
@@ -1258,24 +1259,25 @@
   <section class="hero">
     <div class="hero-inner">
       <div class="hero-copy">
-        <div class="hero-eyebrow">◈ Geometry-Driven Data Processor ◈</div>
+        <div class="hero-eyebrow">◈ A Field Guide to Dimensions ◈</div>
         <h1>TETRACUBE<br><span class="accent">DB</span></h1>
-        <div class="hero-tagline">SURFACE-ADDRESSED STORAGE</div>
+        <div class="hero-tagline">LEARN HOW DIMENSIONS STACK</div>
         <p class="hero-desc">
-          A small, opinionated database that places every cell at a coordinate on a
-          <strong style="color:var(--npu)">triply periodic minimal surface</strong> — the
+          This site is, first, a small lesson on what people actually mean by
+          <em>“dimensions”</em> — from a single point all the way up to a whole world
+          that, from outside, looks like a point again. The database part is just
+          where the lesson lives: every value is placed on a
           <a href="https://en.wikipedia.org/wiki/Gyroid" target="_blank" rel="noopener"
-            style="color:var(--nc)">gyroid</a>,
-          discovered by Alan Schoen at NASA in 1970. Spatial proximity becomes relational proximity.
-          Standard tools on top: REST, WebSockets, SQLite, Bearer auth.
+            style="color:var(--nc)">gyroid</a> surface
+          (Alan Schoen, NASA, 1970, public domain) so you can <em>see</em> the geometry while you read.
         </p>
-        <div class="hero-eq">sin(x)cos(y) + sin(y)cos(z) + sin(z)cos(x) = 0 &nbsp;— Schoen, 1970</div>
+        <div class="hero-eq">point → line → plane → volume → … → a single point in the next world up</div>
         <div class="hero-cta">
-          <a href="#portal" class="btn btn-cyan">API Portal</a>
-          <a href="#examples" class="btn btn-ghost">View API Docs</a>
-          <a href="#dimensions" class="btn btn-purple">Data Shapes</a>
+          <a href="#dimensions" class="btn btn-cyan">Start the Lesson</a>
+          <a href="#theory" class="btn btn-purple">Background</a>
+          <a href="#examples" class="btn btn-ghost">For Developers</a>
         </div>
-        <div class="hero-note">REST + WebSocket · SQLite Persistence · Server-Side Hooks · Bearer Auth</div>
+        <div class="hero-note">Free to read · No login required · Public-domain math throughout</div>
       </div>
       <div class="gyroid-widget">
         <canvas id="hero-canvas"></canvas>
@@ -1380,7 +1382,8 @@
           <div class="dim-ex">kensgames, butterflyfx, your-app</div>
         </div>
       </div>
-      <div style="max-width:880px;margin:2rem auto 0;padding:1.2rem 1.4rem;border:1px solid rgba(0,255,255,.18);background:rgba(0,255,255,.03);border-radius:6px;font-size:0.92rem;line-height:1.6;color:var(--txm)">
+      <div
+        style="max-width:880px;margin:2rem auto 0;padding:1.2rem 1.4rem;border:1px solid rgba(0,255,255,.18);background:rgba(0,255,255,.03);border-radius:6px;font-size:0.92rem;line-height:1.6;color:var(--txm)">
         <strong style="color:var(--nc);letter-spacing:0.04em">A NOTE ON DIMENSIONS.</strong>
         Some readers will notice the list stops at seven. Earlier drafts split level 5 into a “stack”
         and level 6 into a “volume,” but a stack of values <em>is</em> a small volume — they're the same
@@ -1390,6 +1393,127 @@
         That recursive ladder (a point becomes a line becomes a plane becomes a volume…) is
         the same one Edwin Abbott sketched in <em>Flatland</em> back in 1884, and it's the only piece
         of the dimensional picture this page tries to teach.
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════ DIMENSIONS 101 (LESSON) ══════════════════ -->
+  <section class="sec" id="learn" style="background:rgba(4,4,20,.5);">
+    <div class="sec-inner">
+      <div class="sec-hdr">
+        <div class="sec-eye">◈ Lesson</div>
+        <div class="sec-title">DIMENSIONS 101</div>
+        <p class="sec-sub">
+          Most people meet “dimensions” in school as <em>x, y, z</em> — three perpendicular arrows and
+          that's the end of it. The real story is much friendlier, and you can climb the whole ladder
+          using only one rule.
+        </p>
+      </div>
+
+      <div style="max-width:880px;margin:0 auto;color:var(--txm);font-size:1rem;line-height:1.75">
+
+        <h3 style="color:var(--nc);letter-spacing:0.06em;margin-top:1.6rem">THE ONE RULE</h3>
+        <p>
+          <strong style="color:var(--nc)">Every dimension is just a point in the next dimension up.</strong>
+          Drag a point sideways and you draw a line. Drag a line sideways and you draw a square.
+          Drag a square upward and you draw a cube. Drag a cube “sideways” in a direction we can't
+          see and you draw a four‑dimensional shape — a tesseract — and so on. The trick repeats forever.
+        </p>
+
+        <h3 style="color:var(--nc);letter-spacing:0.06em;margin-top:1.8rem">THE LADDER, ONE RUNG AT A TIME</h3>
+        <ul style="list-style:none;padding:0;margin:0.8rem 0 0">
+          <li style="padding:0.6rem 0;border-bottom:1px solid rgba(0,255,255,.08)">
+            <strong style="color:var(--nc)">0 · the point.</strong>
+            No size, no direction, no neighbours. The seed of everything.
+          </li>
+          <li style="padding:0.6rem 0;border-bottom:1px solid rgba(0,255,255,.08)">
+            <strong style="color:var(--nc)">1 · the line.</strong>
+            A point dragged in one direction. You can move forward and backward, nothing else.
+            (Imagine an ant on a wire.)
+          </li>
+          <li style="padding:0.6rem 0;border-bottom:1px solid rgba(0,255,255,.08)">
+            <strong style="color:var(--nc)">2 · the plane.</strong>
+            A line dragged sideways. Now there's <em>area</em>. Edwin Abbott's 1884 book
+            <em>Flatland</em> (free on Project Gutenberg) is a whole story told from inside this rung.
+          </li>
+          <li style="padding:0.6rem 0;border-bottom:1px solid rgba(0,255,255,.08)">
+            <strong style="color:var(--nc)">3 · the volume.</strong>
+            A plane dragged upward. The world we live in. Length, width, height — the famous three.
+          </li>
+          <li style="padding:0.6rem 0;border-bottom:1px solid rgba(0,255,255,.08)">
+            <strong style="color:var(--nc)">4 · a volume that changes.</strong>
+            Most people picture this as <em>time</em> — a stack of 3D snapshots, one after another.
+            That's the same shape as a video, or a stack of MRI slices, or a database
+            table that grows new rows.
+          </li>
+          <li style="padding:0.6rem 0;border-bottom:1px solid rgba(0,255,255,.08)">
+            <strong style="color:var(--nc)">5, 6, 7…</strong>
+            Just keep dragging. Each new dimension is “all of the previous one, indexed by one more thing.”
+            Mathematicians and physicists do this routinely — string theory uses 10 or 11, statistics
+            happily lives in hundreds.
+          </li>
+          <li style="padding:0.6rem 0">
+            <strong style="color:var(--nc)">M · completion.</strong>
+            Whatever sits at the top of your ladder is, from the outside, a single point again — the
+            seed for the next ladder up. That's why the list never really ends; it just folds.
+          </li>
+        </ul>
+
+        <h3 style="color:var(--nc);letter-spacing:0.06em;margin-top:1.8rem">WHY “STACK” AND “VOLUME” ARE THE SAME THING
+        </h3>
+        <p>
+          A <em>stack</em> of squares <em>is</em> a cube. A <em>stack</em> of cubes <em>is</em> a 4D block.
+          Whenever you stack copies of one rung on top of each other, you've built the next rung up —
+          there is no separate “stack” dimension hiding between them. The data‑shape list on this page
+          uses one word for both ideas (“time‑series”) so the ladder stays clean.
+        </p>
+
+        <h3 style="color:var(--nc);letter-spacing:0.06em;margin-top:1.8rem">WHY THE GYROID?</h3>
+        <p>
+          A <a href="https://en.wikipedia.org/wiki/Triply_periodic_minimal_surface" target="_blank" rel="noopener"
+            style="color:var(--nc)">triply periodic minimal surface</a> is a sheet that
+          repeats forever in all three directions and is, at every point, locally as flat as it can be.
+          Soap films do it. Butterfly‑wing scales do it. Block copolymers do it. The
+          <a href="https://en.wikipedia.org/wiki/Gyroid" target="_blank" rel="noopener"
+            style="color:var(--nc)">gyroid</a> is one specific surface from that family, written down by
+          Alan Schoen at NASA in 1970 (<a href="https://ntrs.nasa.gov/citations/19700020472" target="_blank"
+            rel="noopener" style="color:var(--txm)">NASA TN D‑5541</a>) and described by
+          this little level‑set equation:
+        </p>
+        <p
+          style="font-family:monospace;color:var(--nc);text-align:center;font-size:1rem;padding:0.8rem 0;letter-spacing:0.04em">
+          sin(x)·cos(y) + sin(y)·cos(z) + sin(z)·cos(x) = 0
+        </p>
+        <p>
+          Plug any (x, y, z) in. If it equals zero, the point is on the surface. The shape that comes
+          out is woven, gently curving, and infinite — a friendly thing to <em>place</em> data on,
+          because two values placed near each other on the surface are also near each other in space.
+        </p>
+
+        <h3 style="color:var(--nc);letter-spacing:0.06em;margin-top:1.8rem">WHAT THIS HAS TO DO WITH STORAGE</h3>
+        <p>
+          A normal database is a filing cabinet — rows in folders, folders in drawers. TetracubeDB
+          uses the gyroid like a giant pegboard: every value gets a position. Values that belong
+          together end up close together, so “what's near this?” becomes a useful question. None of
+          the math above is owned by anyone — it's been in textbooks for half a century. What this
+          project contributes is the wiring around it; that part lives on the server, not on this page.
+        </p>
+
+        <h3 style="color:var(--nc);letter-spacing:0.06em;margin-top:1.8rem">GO DEEPER (ALL FREE)</h3>
+        <ul style="padding-left:1.2rem">
+          <li><a href="https://www.gutenberg.org/ebooks/97" target="_blank" rel="noopener"
+              style="color:var(--nc)">Flatland</a> — Edwin Abbott, 1884. The classic introduction.</li>
+          <li><a href="https://en.wikipedia.org/wiki/Tesseract" target="_blank" rel="noopener"
+              style="color:var(--nc)">Tesseract (4D cube)</a> — the next rung after the cube, with rotating diagrams.
+          </li>
+          <li><a href="https://en.wikipedia.org/wiki/Minimal_surface" target="_blank" rel="noopener"
+              style="color:var(--nc)">Minimal surfaces</a> — the family of shapes the gyroid belongs to.</li>
+          <li><a href="https://en.wikipedia.org/wiki/Gyroid" target="_blank" rel="noopener"
+              style="color:var(--nc)">Gyroid</a> — Schoen's surface, with pictures.</li>
+          <li><a href="https://ntrs.nasa.gov/citations/19700020472" target="_blank" rel="noopener"
+              style="color:var(--nc)">NASA TN D‑5541</a> — the original 1970 technical note.</li>
+        </ul>
+
       </div>
     </div>
   </section>
