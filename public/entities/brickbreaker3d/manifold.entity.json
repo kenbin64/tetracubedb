@@ -1,0 +1,52 @@
+{
+  "entity": "brickbreaker3d",
+  "name": "BrickBreaker 3D",
+  "tagline": "3D brick breaking with golden ratio physics and layered geometry",
+  "icon": "🧱",
+  "version": "1.0.0",
+  "status": "production",
+  "dimension": {
+    "x": 2,
+    "y": 22,
+    "z": 44,
+    "_note": "z = x*y = 2 players avg * 22 min avg = 44; D4 PLANE on gyroid"
+  },
+  "launch": {
+    "url": "https://kensgames.com/brickbreaker3d/game.html",
+    "params": {
+      "offline": "true",
+      "autostart": "1"
+    },
+    "allowBots": false
+  },
+  "setup": {
+    "botOptions": [],
+    "musicToggle": true,
+    "sfxToggle": true
+  },
+  "substrates": {
+    "physics": "brickbreaker_manifold.js",
+    "graphics": "shared:GraphicsSubstrate",
+    "audio": "shared:AudioSubstrate",
+    "game_logic": "shared:GameLogicSubstrate"
+  },
+  "physics": {
+    "model": "golden_ratio_speed",
+    "_note": "Speed boost per brick layer uses golden ratio φ ≈ 1.618"
+  },
+  "manifold_bridge": {
+    "entry_var": "window.__MANIFOLD__",
+    "exposes": [
+      "level",
+      "score",
+      "lives",
+      "ballPosition",
+      "brickGrid"
+    ]
+  },
+  "source": {
+    "portal": "kensgames.com",
+    "path": "brickbreaker3d/",
+    "manifold": "brickbreaker3d/manifold.game.json"
+  }
+}

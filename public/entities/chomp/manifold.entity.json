@@ -1,0 +1,53 @@
+{
+  "entity": "chomp",
+  "name": "Chomp",
+  "tagline": "Wally the Cairns Crocodile hunts through 8 estuary biomes — φ-scaled physics",
+  "icon": "🐊",
+  "version": "1.0.0",
+  "status": "production",
+  "dimension": {
+    "x": 1,
+    "y": 8,
+    "z": 8,
+    "_note": "z = x*y = 1 player * 8 levels = 8; game is a 3D volume manifold (Cairns estuary)"
+  },
+  "launch": {
+    "url": "https://kensgames.com/chomp/game.html",
+    "params": {
+      "offline": "true"
+    },
+    "allowBots": false
+  },
+  "setup": {
+    "botOptions": [],
+    "musicToggle": true,
+    "sfxToggle": true
+  },
+  "substrates": {
+    "player": "inline:WallySubstrate",
+    "world": "inline:EstuaryWorldSubstrate",
+    "prey": "inline:PreySubstrate",
+    "hazards": "inline:HazardSubstrate",
+    "camera": "inline:ThirdPersonCameraSubstrate",
+    "scoring": "inline:ScoringSubstrate"
+  },
+  "physics": {
+    "model": "phi_swimming",
+    "_note": "Wally's swim speed, chomp arc, and tail-sweep radius scale by golden ratio φ ≈ 1.618 per upgrade tier"
+  },
+  "manifold_bridge": {
+    "entry_var": "window.__MANIFOLD__",
+    "exposes": [
+      "score",
+      "level",
+      "health",
+      "chomp_streak",
+      "wallyPosition"
+    ]
+  },
+  "source": {
+    "portal": "kensgames.com",
+    "path": "chomp/",
+    "manifold": "chomp/manifold.game.json"
+  }
+}

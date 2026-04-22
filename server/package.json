@@ -1,0 +1,33 @@
+{
+  "name": "tetracubedb",
+  "version": "1.0.0",
+  "description": "Manifold-First Database — Schwartz Diamond Gyroid geometry as data, 7 dimensions, persistent SQLite store",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "provision": "node provision.js",
+    "test": "node --test tests/gyroid_core.test.js"
+  },
+  "keywords": [
+    "manifold",
+    "gyroid",
+    "database",
+    "7d",
+    "tetracube",
+    "kensgames"
+  ],
+  "author": "KensGames",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "better-sqlite3": "^9.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "ws": "^8.20.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

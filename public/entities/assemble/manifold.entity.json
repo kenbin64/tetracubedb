@@ -1,0 +1,44 @@
+{
+  "entity": "assemble",
+  "name": "Assemble",
+  "tagline": "Collaborative part-assembly puzzle — build together or race to completion",
+  "icon": "🔧",
+  "version": "1.0.0",
+  "status": "production",
+  "dimension": {
+    "x": 2,
+    "y": 20,
+    "z": 40,
+    "_note": "z = x*y = 2 players avg * 20 min avg = 40; D4 PLANE on gyroid"
+  },
+  "launch": {
+    "url": "https://kensgames.com/assemble/game.html",
+    "params": {
+      "offline": "true"
+    },
+    "allowBots": false
+  },
+  "setup": {
+    "botOptions": [],
+    "musicToggle": true,
+    "sfxToggle": true
+  },
+  "substrates": {
+    "assembler": "assembler.js",
+    "parts": "parts.js"
+  },
+  "manifold_bridge": {
+    "entry_var": "window.__MANIFOLD__",
+    "exposes": [
+      "assemblyState",
+      "selectedParts",
+      "completedItems",
+      "score"
+    ]
+  },
+  "source": {
+    "portal": "kensgames.com",
+    "path": "assemble/",
+    "manifold": "assemble/manifold.game.json"
+  }
+}

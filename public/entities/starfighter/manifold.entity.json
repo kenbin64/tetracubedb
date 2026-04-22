@@ -1,0 +1,55 @@
+{
+  "entity": "starfighter",
+  "name": "Starfighter",
+  "tagline": "AI-driven space combat with adaptive NPC cognition",
+  "icon": "🚀",
+  "version": "1.0.0",
+  "status": "production",
+  "dimension": {
+    "x": 2,
+    "y": 30,
+    "z": 60,
+    "_note": "z = x*y = 2 players avg * 30 min avg = 60; D4 PLANE on gyroid"
+  },
+  "launch": {
+    "url": "https://kensgames.com/starfighter/game.html",
+    "params": {
+      "mode": "solo"
+    },
+    "allowBots": true
+  },
+  "setup": {
+    "botOptions": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "musicToggle": true,
+    "sfxToggle": true
+  },
+  "substrates": {
+    "rendering": "3d.js",
+    "anpc": "anpc_manifold.js",
+    "hive_queen": "hive_queen_manifold.js",
+    "audio": "manifold_audio_substrate.js",
+    "geometry": "manifold_geometry_substrate.js",
+    "progression": "progression.js"
+  },
+  "manifold_bridge": {
+    "entry_var": "window.__MANIFOLD__",
+    "exposes": [
+      "missionState",
+      "playerShip",
+      "enemies",
+      "score",
+      "wave",
+      "emotion"
+    ]
+  },
+  "source": {
+    "portal": "kensgames.com",
+    "path": "starfighter/",
+    "manifold": "starfighter/manifold.game.json"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "_comment": "TetracubeDB App Manifest — root config for the Ultimate App. z = x*y is the universal access rule.",
+  "name": "tetracubedb-ultimate",
+  "version": "1.0.0",
+  "domain": "tetracubedb.com",
+  "dimension": {
+    "x": "player_count",
+    "y": "play_time_min",
+    "z": "x * y",
+    "_note": "z = x*y is the universal access rule; every entity must satisfy this"
+  },
+  "substrates": {
+    "gyroid": "/substrate/gyroid.js",
+    "kernel": "/js/kernel.js"
+  },
+  "entities": [
+    {
+      "id": "fasttrack",
+      "path": "/entities/fasttrack/manifold.entity.json"
+    },
+    {
+      "id": "starfighter",
+      "path": "/entities/starfighter/manifold.entity.json"
+    },
+    {
+      "id": "brickbreaker3d",
+      "path": "/entities/brickbreaker3d/manifold.entity.json"
+    },
+    {
+      "id": "4dtictactoe",
+      "path": "/entities/4dtictactoe/manifold.entity.json"
+    },
+    {
+      "id": "assemble",
+      "path": "/entities/assemble/manifold.entity.json"
+    },
+    {
+      "id": "chomp",
+      "path": "/entities/chomp/manifold.entity.json"
+    }
+  ],
+  "_note": "To add a game: create /entities/<id>/manifold.entity.json and add an entry here. No code changes required."
+}

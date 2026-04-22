@@ -1,0 +1,2391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MANIFOLD — Diamond Edition Specification</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --c1: #00ffff;
+      --c2: #bf00ff;
+      --c3: #39ff14;
+      --void: #0c0a08;
+      --surface: #1a1510;
+      --wood: #2a2118;
+      --wood-light: #3d3025;
+      --text: #e8ddd0;
+      --dim: #8a7a68;
+      --glow1: 0 0 10px var(--c1), 0 0 40px rgba(0, 255, 255, 0.15);
+      --glow2: 0 0 10px var(--c2), 0 0 40px rgba(191, 0, 255, 0.15);
+      --glow3: 0 0 10px var(--c3), 0 0 40px rgba(57, 255, 20, 0.15);
+      --panel-bg: rgba(30, 24, 18, 0.92);
+      --panel-border: rgba(160, 120, 60, 0.2);
+      --phi: 1.618rem;
+      --phi2: 2.618rem;
+    }
+
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--void);
+      background-image:
+        radial-gradient(ellipse at 50% 0%, rgba(0, 255, 255, 0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(191, 0, 255, 0.03) 0%, transparent 40%),
+        radial-gradient(ellipse at 20% 60%, rgba(57, 255, 20, 0.02) 0%, transparent 40%);
+      color: var(--text);
+      min-height: 100vh;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* ── HEADER ─────────────────────────────────────────────── */
+    header {
+      text-align: center;
+      padding: 4rem 2rem 2rem;
+      border-bottom: 1px solid rgba(0, 255, 255, 0.12);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: 'z = x · y';
+      position: absolute;
+      bottom: 1rem;
+      right: 2rem;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.4rem;
+      letter-spacing: 4px;
+      color: rgba(0, 255, 255, 0.05);
+      pointer-events: none;
+    }
+
+    .doc-badge {
+      display: inline-block;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.45rem;
+      color: var(--c2);
+      border: 1px solid var(--c2);
+      padding: 0.3rem 0.8rem;
+      letter-spacing: 2px;
+      text-shadow: var(--glow2);
+      box-shadow: var(--glow2);
+      margin-bottom: 1.5rem;
+    }
+
+    h1.doc-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(1rem, 3vw, 1.8rem);
+      color: var(--c1);
+      text-shadow: var(--glow1);
+      line-height: 1.4;
+      margin-bottom: 0.5rem;
+    }
+
+    .doc-subtitle {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(0.4rem, 1vw, 0.6rem);
+      color: var(--c3);
+      letter-spacing: 2px;
+      margin-bottom: 1.5rem;
+    }
+
+    .doc-meta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      font-size: 0.8rem;
+      color: var(--dim);
+    }
+
+    .doc-meta span strong {
+      color: var(--text);
+    }
+
+    /* ── LAYOUT ──────────────────────────────────────────────── */
+    .layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      max-width: 1400px;
+      margin: 0 auto;
+      gap: 0;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .toc-sidebar {
+        display: none;
+      }
+    }
+
+    /* ── SIDEBAR / TOC ───────────────────────────────────────── */
+    .toc-sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 2rem 1.5rem;
+      border-right: 1px solid rgba(0, 255, 255, 0.08);
+      scrollbar-width: thin;
+      scrollbar-color: var(--c1) transparent;
+    }
+
+    .toc-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.45rem;
+      color: var(--c1);
+      letter-spacing: 2px;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid rgba(0, 255, 255, 0.15);
+    }
+
+    .toc-list {
+      list-style: none;
+    }
+
+    .toc-list li {
+      margin-bottom: 0.2rem;
+    }
+
+    .toc-list a {
+      color: var(--dim);
+      text-decoration: none;
+      font-size: 0.78rem;
+      display: block;
+      padding: 0.25rem 0.5rem;
+      border-left: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .toc-list a:hover {
+      color: var(--c1);
+      border-left-color: var(--c1);
+      background: rgba(0, 255, 255, 0.04);
+    }
+
+    .toc-list .toc-sub a {
+      font-size: 0.72rem;
+      padding-left: 1.2rem;
+      color: rgba(138, 122, 104, 0.7);
+    }
+
+    .toc-list .toc-sub a:hover {
+      color: var(--c3);
+      border-left-color: var(--c3);
+    }
+
+    /* ── CONTENT ──────────────────────────────────────────────── */
+    .content {
+      padding: 3rem 3.5rem 5rem;
+      max-width: 900px;
+    }
+
+    @media (max-width: 700px) {
+      .content {
+        padding: 2rem 1.2rem 4rem;
+      }
+    }
+
+    /* ── SECTION HEADERS ─────────────────────────────────────── */
+    .section {
+      margin-bottom: 4rem;
+      scroll-margin-top: 2rem;
+    }
+
+    h2.section-head {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(0.55rem, 1.5vw, 0.75rem);
+      color: var(--c1);
+      text-shadow: var(--glow1);
+      letter-spacing: 1px;
+      padding: 1rem 1.5rem;
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      background: rgba(0, 255, 255, 0.03);
+      margin-bottom: 1.8rem;
+    }
+
+    h3.subsection-head {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(0.45rem, 1vw, 0.6rem);
+      color: var(--c3);
+      margin: 2rem 0 1rem;
+      letter-spacing: 1px;
+    }
+
+    h4 {
+      font-size: 0.85rem;
+      color: var(--c2);
+      font-weight: 600;
+      margin: 1.5rem 0 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ── PROSE ───────────────────────────────────────────────── */
+    p {
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    strong {
+      color: var(--c1);
+      font-weight: 600;
+    }
+
+    em {
+      color: var(--c3);
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    ul,
+    ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    li {
+      margin-bottom: 0.35rem;
+    }
+
+    /* ── QUOTE / DIRECTIVE ───────────────────────────────────── */
+    blockquote {
+      border-left: 3px solid var(--c2);
+      background: rgba(191, 0, 255, 0.04);
+      padding: 1rem 1.5rem;
+      margin: 1.5rem 0;
+      font-style: italic;
+      color: #c8b8a8;
+    }
+
+    blockquote cite {
+      display: block;
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--dim);
+      font-style: normal;
+    }
+
+    .directive {
+      border: 1px solid var(--c2);
+      background: rgba(191, 0, 255, 0.05);
+      padding: 1.2rem 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: var(--glow2);
+    }
+
+    .directive-label {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.45rem;
+      color: var(--c2);
+      letter-spacing: 2px;
+      margin-bottom: 0.6rem;
+    }
+
+    /* ── CALLOUT BOXES ────────────────────────────────────────── */
+    .callout {
+      border: 1px solid var(--c1);
+      background: rgba(0, 255, 255, 0.03);
+      padding: 1rem 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: var(--glow1);
+    }
+
+    .callout-label {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.4rem;
+      color: var(--c1);
+      letter-spacing: 2px;
+      margin-bottom: 0.5rem;
+    }
+
+    .callout-green {
+      border-color: var(--c3);
+      background: rgba(57, 255, 20, 0.03);
+      box-shadow: var(--glow3);
+    }
+
+    .callout-green .callout-label {
+      color: var(--c3);
+    }
+
+    /* ── TABLES ───────────────────────────────────────────────── */
+    .table-wrap {
+      overflow-x: auto;
+      margin: 1.5rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    thead tr {
+      background: rgba(0, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+    }
+
+    th {
+      padding: 0.7rem 1rem;
+      text-align: left;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.4rem;
+      color: var(--c1);
+      letter-spacing: 1px;
+    }
+
+    td {
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid rgba(160, 120, 60, 0.1);
+      vertical-align: top;
+    }
+
+    tr:hover td {
+      background: rgba(0, 255, 255, 0.02);
+    }
+
+    /* ── CODE BLOCKS ─────────────────────────────────────────── */
+    pre {
+      background: rgba(10, 8, 6, 0.9);
+      border: 1px solid rgba(0, 255, 255, 0.12);
+      border-left: 3px solid var(--c1);
+      padding: 1.2rem 1.5rem;
+      margin: 1.5rem 0;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: #b8d4b8;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em;
+      color: var(--c1);
+      background: rgba(0, 255, 255, 0.07);
+      padding: 0.1em 0.4em;
+      border-radius: 2px;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+
+    .code-label {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.4rem;
+      color: var(--dim);
+      letter-spacing: 2px;
+      margin-bottom: 0.3rem;
+    }
+
+    /* ── EQUATION ────────────────────────────────────────────── */
+    .equation-box {
+      text-align: center;
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: rgba(0, 255, 255, 0.03);
+      border: 1px solid rgba(0, 255, 255, 0.15);
+    }
+
+    .eq-label {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.4rem;
+      color: var(--dim);
+      letter-spacing: 2px;
+      margin-bottom: 0.8rem;
+    }
+
+    .eq-formula {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      color: var(--c1);
+      text-shadow: var(--glow1);
+      letter-spacing: 4px;
+    }
+
+    /* ── LAYER CARDS ─────────────────────────────────────────── */
+    .layer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .layer-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      padding: 1.2rem;
+      position: relative;
+    }
+
+    .layer-num {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.55rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .layer-card:nth-child(1) .layer-num {
+      color: var(--c1);
+    }
+
+    .layer-card:nth-child(2) .layer-num {
+      color: var(--c2);
+    }
+
+    .layer-card:nth-child(3) .layer-num {
+      color: var(--c3);
+    }
+
+    .layer-card:nth-child(4) .layer-num {
+      color: #ff9500;
+    }
+
+    .layer-card:nth-child(5) .layer-num {
+      color: #ff5ccc;
+    }
+
+    .layer-card:nth-child(6) .layer-num {
+      color: #8080ff;
+    }
+
+    .layer-card:nth-child(7) .layer-num {
+      color: #ffd700;
+    }
+
+    .layer-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .layer-role {
+      font-size: 0.82rem;
+      color: var(--dim);
+    }
+
+    /* ── SUBSTRATE DIAGRAM ───────────────────────────────────── */
+    .diamond-diagram {
+      background: rgba(10, 8, 6, 0.9);
+      border: 1px solid rgba(0, 255, 255, 0.12);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--c3);
+      line-height: 1.8;
+      overflow-x: auto;
+    }
+
+    /* ── FOOTER ──────────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid rgba(0, 255, 255, 0.08);
+      color: var(--dim);
+      font-size: 0.78rem;
+    }
+
+    footer .footer-eq {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.4rem;
+      color: rgba(0, 255, 255, 0.2);
+      margin-top: 0.5rem;
+      letter-spacing: 4px;
+    }
+
+    /* ── SCROLLBAR ───────────────────────────────────────────── */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--void);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 255, 255, 0.2);
+      border-radius: 3px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="doc-badge">DIAMOND EDITION v1.0</div>
+    <h1 class="doc-title">MANIFOLD</h1>
+    <div class="doc-subtitle">Complete Substrate Architecture Design Document</div>
+    <div class="doc-meta">
+      <span><strong>Author:</strong> Ken Bingham</span>
+      <span><strong>Organization:</strong> Ken's Games / ButterflyFX</span>
+      <span><strong>Governing Equation:</strong> f = x · y</span>
+      <span><strong>Date:</strong> April 12, 2026</span>
+      <span><strong>License:</strong> Proprietary — Ken Bingham / Ken's Games</span>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <!-- ── SIDEBAR TOC ─────────────────────────────────────────── -->
+    <aside class="toc-sidebar">
+      <div class="toc-title">CONTENTS</div>
+      <ul class="toc-list">
+        <li><a href="#executive-summary">Executive Summary</a></li>
+        <li><a href="#s1">§1 Project Identity</a></li>
+        <li><a href="#s2">§2 Mathematical Foundations</a></li>
+        <ul class="toc-sub">
+          <li><a href="#s2-1">2.1 Primary Surface z = x·y</a></li>
+          <li><a href="#s2-2">2.2 Secondary Surface z = x·y²</a></li>
+          <li><a href="#s2-3">2.3 The Golden Ratio φ</a></li>
+          <li><a href="#s2-4">2.4 Fibonacci Sequence</a></li>
+          <li><a href="#s2-5">2.5 Musical Frequency Formula</a></li>
+          <li><a href="#s2-6">2.6 Schwartz Surface Connection</a></li>
+          <li><a href="#s2-7">2.7 Three States of Every Point</a></li>
+        </ul>
+        <li><a href="#s3">§3 7-Layer Dimensional Helix</a></li>
+        <li><a href="#s4">§4 Substrate Architecture</a></li>
+        <ul class="toc-sub">
+          <li><a href="#s4-1">4.1 What Is a Substrate?</a></li>
+          <li><a href="#s4-2">4.2 Diamond Communication Pattern</a></li>
+          <li><a href="#s4-3">4.3 Substrate Lifecycle</a></li>
+          <li><a href="#s4-4">4.4 Surface Registry</a></li>
+          <li><a href="#s4-5">4.5 Standard Substrate Catalog</a></li>
+        </ul>
+        <li><a href="#s5">§5 Implementation Specification</a></li>
+        <ul class="toc-sub">
+          <li><a href="#s5-1">5.1 Language & Runtime</a></li>
+          <li><a href="#s5-2">5.2 File Structure</a></li>
+          <li><a href="#s5-3">5.3 Substrate Class Template</a></li>
+          <li><a href="#s5-4">5.4 Main Loop Structure</a></li>
+          <li><a href="#s5-5">5.5 Surface Registry Impl.</a></li>
+          <li><a href="#s5-6">5.6 Surface Evaluation Impl.</a></li>
+        </ul>
+        <li><a href="#s6">§6 Application: Fast Track</a></li>
+        <li><a href="#s7">§7 Application: Starfighter</a></li>
+        <li><a href="#s8">§8 Diamond Topology in Detail</a></li>
+        <li><a href="#s9">§9 Extending the Manifold</a></li>
+        <li><a href="#s10">§10 Quality Standards</a></li>
+        <li><a href="#s11">§11 Commercial Deployment</a></li>
+        <li><a href="#s12">§12 Glossary</a></li>
+      </ul>
+    </aside>
+
+    <!-- ── MAIN CONTENT ───────────────────────────────────────── -->
+    <main class="content">
+
+      <!-- EXECUTIVE SUMMARY -->
+      <section class="section" id="executive-summary">
+        <h2 class="section-head">EXECUTIVE SUMMARY</h2>
+        <p>This document defines the complete mathematical, architectural, and implementation specification for the
+          <strong>Manifold substrate system</strong> — the foundational computational framework powering the ButterflyFX
+          Dimensional Programming Platform. It is the single source of truth for all ButterflyFX-powered applications.
+          Any AI agent, developer, or system consuming this document SHALL be able to implement a fully compliant
+          substrate constellation from scratch.</p>
+        <p>The Manifold architecture replaces traditional event-driven, callback-based software design with a purely
+          geometric paradigm: substrates publish and read coordinates on shared mathematical surfaces. There are no
+          function calls between modules, no callbacks, no event buses, and no message queues. Communication happens
+          through the topology of the manifold itself.</p>
+        <p>The governing equation <strong>z = x · y</strong> — a hyperbolic paraboloid (saddle surface) — serves as the
+          primary computational manifold upon which game state, audio synthesis, AI decisions, and physics all evaluate.
+          The golden ratio <strong>φ = 1.6180339887…</strong> governs all proportional relationships. The Fibonacci
+          sequence governs all weighting distributions. The Schwartz Diamond surface provides the topological template
+          for substrate interconnection.</p>
+
+        <blockquote>
+          "Dimensions ARE the computation. Substrates do not call each other — they publish coordinates on shared
+          manifold surfaces. Other substrates read those surfaces. No callbacks. No spaghetti. Just geometry."
+          <cite>— Ken Bingham, ButterflyFX Design Philosophy</cite>
+        </blockquote>
+
+        <p>This specification governs all projects in the Ken's Games ecosystem, including <em>Fast Track</em>,
+          <em>Starfighter</em>, and all future titles. Every value herein is explicit and deterministic. No
+          approximations. No magic numbers. Every dimension cascades from φ.</p>
+      </section>
+
+      <!-- SECTION 1 -->
+      <section class="section" id="s1">
+        <h2 class="section-head">§1 — PROJECT IDENTITY</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Project Name</td>
+                <td>Manifold — Diamond Substrate Architecture</td>
+              </tr>
+              <tr>
+                <td>Author</td>
+                <td>Ken Bingham</td>
+              </tr>
+              <tr>
+                <td>Organization</td>
+                <td>Ken's Games / ButterflyFX</td>
+              </tr>
+              <tr>
+                <td>Governing Equation</td>
+                <td><code>f = x · y</code></td>
+              </tr>
+              <tr>
+                <td>Design Philosophy</td>
+                <td>"Dimensions ARE the computation."</td>
+              </tr>
+              <tr>
+                <td>Source Path</td>
+                <td><code>C:\manifold\</code></td>
+              </tr>
+              <tr>
+                <td>License</td>
+                <td>Proprietary — Ken Bingham / Ken's Games</td>
+              </tr>
+              <tr>
+                <td>Edition</td>
+                <td>Diamond Edition v1.0</td>
+              </tr>
+              <tr>
+                <td>Applications Governed</td>
+                <td>Fast Track, Starfighter, and all future Ken's Games titles</td>
+              </tr>
+              <tr>
+                <td>Document Classification</td>
+                <td>Technical Specification &amp; AI Directive</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="directive">
+          <div class="directive-label">DIRECTIVE</div>
+          <p>Substrates do not call each other — they publish coordinates on shared manifold surfaces. Other substrates
+            read those surfaces. No callbacks. No spaghetti. Just geometry. Every value in this document is explicit and
+            deterministic. There are no "approximately" values except for irrational constants (φ, π, √5). All
+            dimensions, proportions, and relationships cascade mathematically from the governing equation and the golden
+            ratio.</p>
+        </div>
+      </section>
+
+      <!-- SECTION 2 -->
+      <section class="section" id="s2">
+        <h2 class="section-head">§2 — MATHEMATICAL FOUNDATIONS</h2>
+        <p>The Manifold system rests upon a small number of mathematical primitives from which all complexity emerges.
+          These foundations are not metaphors — they are literal computational surfaces, sequences, and ratios that
+          govern every value in every application built on ButterflyFX.</p>
+
+        <h3 class="subsection-head" id="s2-1">2.1 The Primary Manifold Surface: z = x · y</h3>
+        <div class="equation-box">
+          <div class="eq-label">THE RELATION SURFACE</div>
+          <div class="eq-formula">z = x · y</div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Name</td>
+                <td>The "Relation" Surface</td>
+              </tr>
+              <tr>
+                <td>Equation</td>
+                <td><code>z = x · y</code></td>
+              </tr>
+              <tr>
+                <td>Geometry</td>
+                <td>Hyperbolic paraboloid (saddle surface) in 3D space</td>
+              </tr>
+              <tr>
+                <td>Origin</td>
+                <td>The surface passes through the origin (0, 0, 0)</td>
+              </tr>
+              <tr>
+                <td>Along y = x</td>
+                <td>z = x² — the surface rises parabolically</td>
+              </tr>
+              <tr>
+                <td>Along y = −x</td>
+                <td>z = −x² — the surface descends parabolically</td>
+              </tr>
+              <tr>
+                <td>Saddle Point</td>
+                <td>At the origin — a critical point with zero gradient</td>
+              </tr>
+              <tr>
+                <td>Gradient</td>
+                <td>∇f = (y, x)</td>
+              </tr>
+              <tr>
+                <td>Gradient Magnitude</td>
+                <td>|∇f| = √(x² + y²)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Role in the System:</strong> This surface is the primary computational manifold. Game state, audio
+          synthesis, AI decisions, and physics all evaluate coordinates on this surface. The z-value at any (x, y)
+          coordinate encodes information — pitch, volume, position, score, probability, or any domain-specific quantity.
+          Every point (x, y) maps to exactly one unique z-value, making the system deterministic and reproducible.</p>
+        <p><strong>Gradient Interpretation:</strong> The gradient ∇f = (y, x) at any point tells you the direction of
+          steepest ascent on the surface. AI agents walk along these gradients to make decisions. The gradient's
+          magnitude |∇f| = √(x² + y²) indicates decision confidence — higher magnitude means a steeper surface and
+          therefore a more decisive evaluation.</p>
+
+        <h3 class="subsection-head" id="s2-2">2.2 The Secondary Manifold Surface: z = x · y²</h3>
+        <div class="equation-box">
+          <div class="eq-label">THE FORM SURFACE</div>
+          <div class="eq-formula">z = x · y²</div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Name</td>
+                <td>The "Form" Surface</td>
+              </tr>
+              <tr>
+                <td>Equation</td>
+                <td><code>z = x · y²</code></td>
+              </tr>
+              <tr>
+                <td>Geometry</td>
+                <td>Curved bowl/trough — asymmetric, with steeper rise in the y direction</td>
+              </tr>
+              <tr>
+                <td>Gradient</td>
+                <td>∇f = (y², 2xy)</td>
+              </tr>
+              <tr>
+                <td>Non-linearity</td>
+                <td>Quadratic in y — creates richer harmonic content and more complex decision landscapes</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Role in the System:</strong> The Form surface is used for sound effect synthesis, harmonic overtone
+          generation, and advanced AI evaluation where non-linear response is needed. Its asymmetry in the y dimension
+          produces richer harmonic content when mapped to audio parameters, and more nuanced decision landscapes when
+          used for AI evaluation.</p>
+
+        <h3 class="subsection-head" id="s2-3">2.3 The Golden Ratio: φ = (1 + √5) / 2</h3>
+        <div class="equation-box">
+          <div class="eq-label">THE GOLDEN RATIO</div>
+          <div class="eq-formula">φ = 1.6180339887…</div>
+        </div>
+        <p>The golden ratio φ governs <strong>ALL</strong> proportions in the Manifold system. No arbitrary pixel
+          values. No magic numbers. All dimensions are φ-derived.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Constant</th>
+                <th>Value</th>
+                <th>Usage</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>φ</td>
+                <td>1.6180339887…</td>
+                <td>Primary proportion ratio for all spatial and temporal relationships</td>
+              </tr>
+              <tr>
+                <td>φ²</td>
+                <td>2.6180339887…</td>
+                <td>Self-similar scaling — used for recursive layout subdivision</td>
+              </tr>
+              <tr>
+                <td>1/φ</td>
+                <td>0.6180339887…</td>
+                <td>Reciprocal — used for inverse proportions and timing decay</td>
+              </tr>
+              <tr>
+                <td>φ³</td>
+                <td>4.2360679774…</td>
+                <td>Third-order scaling for fine detail elements</td>
+              </tr>
+              <tr>
+                <td>φ⁴</td>
+                <td>6.8541019662…</td>
+                <td>Fourth-order scaling for ultra-fine detail (borders, strokes)</td>
+              </tr>
+              <tr>
+                <td>Golden Angle</td>
+                <td>2π / φ² ≈ 137.508°</td>
+                <td>Radial element distribution — phyllotactic spacing for circular layouts</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout">
+          <div class="callout-label">CASCADE PRINCIPLE</div>
+          <p>Every layout decision cascades from φ. Board dimensions, hole spacing, peg sizes, UI element ratios,
+            animation timing curves, and camera field-of-view ratios are all computed as multiples or divisions of φ
+            applied to a base unit R. This guarantees visual harmony across every element at every scale.</p>
+        </div>
+
+        <h3 class="subsection-head" id="s2-4">2.4 The Fibonacci Sequence</h3>
+        <p>The Fibonacci sequence is the discrete integer manifestation of the golden ratio. Its consecutive ratios
+          converge to φ, providing a natural bridge between integer-domain operations and continuous-domain proportions.
+        </p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>n</th>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+                <th>6</th>
+                <th>7</th>
+                <th>8</th>
+                <th>9</th>
+                <th>10</th>
+                <th>11</th>
+                <th>12</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>F(n)</td>
+                <td>1</td>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>5</td>
+                <td>8</td>
+                <td>13</td>
+                <td>21</td>
+                <td>34</td>
+                <td>55</td>
+                <td>89</td>
+                <td>144</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ul>
+          <li>Recurrence: <code>F(n) = F(n−1) + F(n−2)</code>, with F(1) = F(2) = 1</li>
+          <li>Convergence: lim(n→∞) F(n+1)/F(n) = φ</li>
+          <li>Audio layer weighting: <code>weight(layer_i) = F(i) / Σ F(all_layers)</code></li>
+          <li>Animation frame counts: Transitions use Fibonacci frame counts (5, 8, 13, 21 frames)</li>
+          <li>Timing intervals: Delay sequences follow Fibonacci millisecond values</li>
+          <li>Difficulty curve progression: AI difficulty scales along Fibonacci tiers</li>
+          <li>Scoring multipliers: Bonus multipliers drawn from Fibonacci values</li>
+        </ul>
+
+        <h3 class="subsection-head" id="s2-5">2.5 Musical Frequency Formula</h3>
+        <div class="callout">
+          <div class="callout-label">FREQUENCY FORMULA</div>
+          <div class="eq-formula" style="font-size:1.2rem; text-align:center; margin-top:0.5rem;">f = 440 × 2<sup>((n −
+              69) / 12)</sup></div>
+          <p style="margin-top:0.8rem; font-size:0.85rem;">Where n is the MIDI note number. Middle A (A4) = 69. Middle C
+            (C4) = 60.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Note</th>
+                <th>MIDI (n)</th>
+                <th>Frequency (Hz)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>C4 (Middle C)</td>
+                <td>60</td>
+                <td>261.6256</td>
+              </tr>
+              <tr>
+                <td>D4</td>
+                <td>62</td>
+                <td>293.6648</td>
+              </tr>
+              <tr>
+                <td>E4</td>
+                <td>64</td>
+                <td>329.6276</td>
+              </tr>
+              <tr>
+                <td>F4</td>
+                <td>65</td>
+                <td>349.2282</td>
+              </tr>
+              <tr>
+                <td>G4</td>
+                <td>67</td>
+                <td>391.9954</td>
+              </tr>
+              <tr>
+                <td>A4 (Concert A)</td>
+                <td>69</td>
+                <td>440.0000</td>
+              </tr>
+              <tr>
+                <td>B4</td>
+                <td>71</td>
+                <td>493.8833</td>
+              </tr>
+              <tr>
+                <td>C5</td>
+                <td>72</td>
+                <td>523.2511</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Manifold Integration:</strong> The z-value at a surface coordinate maps to n (the MIDI note number),
+          which maps to frequency via the formula above. This allows the Music Substrate to derive pitch directly from
+          game state coordinates on the Relation surface.</p>
+
+        <h3 class="subsection-head" id="s2-6">2.6 The Schwartz Surface Connection</h3>
+        <p>The Schwartz minimal surfaces provide the topological template for substrate interconnection within the
+          Manifold architecture.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Surface Type</td>
+                <td>Schwartz D-surface (Diamond surface) — triply periodic minimal surface</td>
+              </tr>
+              <tr>
+                <td>Mean Curvature</td>
+                <td>H = 0 everywhere (minimal surface — every point is a saddle point)</td>
+              </tr>
+              <tr>
+                <td>Gaussian Curvature</td>
+                <td>K ≤ 0 everywhere (saddle-like at every point)</td>
+              </tr>
+              <tr>
+                <td>Symmetry Group</td>
+                <td>Fd3̄m (diamond cubic)</td>
+              </tr>
+              <tr>
+                <td>Topology</td>
+                <td>Divides R³ into two congruent, interlocking labyrinths</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Architectural Mapping:</strong> The two interlocking labyrinthine channels of the Diamond surface
+          represent:</p>
+        <ul>
+          <li><strong>Channel A — The Data/State Channel:</strong> Coordinates published by substrates (write path)</li>
+          <li><strong>Channel B — The Observation/Read Channel:</strong> Coordinates consumed by substrates (read path)
+          </li>
+        </ul>
+
+        <h3 class="subsection-head" id="s2-7">2.7 Three States of Every Point</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>State</th>
+                <th>Definition</th>
+                <th>Analogy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Potential</strong></td>
+                <td>Unaddressed possibility. The coordinate exists in mathematical space but has not been evaluated.
+                </td>
+                <td>An empty cell in a spreadsheet that has never been visited</td>
+              </tr>
+              <tr>
+                <td><strong>Null</strong></td>
+                <td>Addressed but valueless. The coordinate has been visited/evaluated but carries no manifest value.
+                  Pure location.</td>
+                <td>A cell that has been selected but contains no data</td>
+              </tr>
+              <tr>
+                <td><strong>Manifest</strong></td>
+                <td>Addressed and valued. The coordinate has been evaluated and carries a concrete value.</td>
+                <td>A cell containing a formula result or entered value</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>State Transitions:</strong> Forward: Potential → Null (addressing) → Manifest (valuation). Reverse:
+          Manifest → Null (clearing) → Potential (releasing).</p>
+      </section>
+
+      <!-- SECTION 3 -->
+      <section class="section" id="s3">
+        <h2 class="section-head">§3 — THE BUTTERFLYFX 7-LAYER DIMENSIONAL HELIX</h2>
+        <p>ButterflyFX Dimensional Programming replaces traditional iteration and event-driven programming with
+          dimensional transitions. Each dimension IS an entire lower dimension, carried within it. The helix structure
+          means that upon reaching Layer 7 (Completion), the system spirals upward — Layer 7 becomes the Layer 1 Spark
+          of the next dimensional spiral.</p>
+        <div class="layer-grid">
+          <div class="layer-card">
+            <div class="layer-num">LAYER 1</div>
+            <div class="layer-name">SPARK — The First Light</div>
+            <div class="layer-role">The initial seed. A single value. The origin coordinate. Mathematical analog: the
+              point (0-dimensional). In code: a single constant, a configuration seed, the entry point of computation.
+            </div>
+          </div>
+          <div class="layer-card">
+            <div class="layer-num">LAYER 2</div>
+            <div class="layer-name">MIRROR — Reflection</div>
+            <div class="layer-role">Every value has its complement. Input/output. Read/write. Mathematical analog:
+              duality (1-dimensional — the line between two points). In code: every substrate has a publish side and a
+              read side.</div>
+          </div>
+          <div class="layer-card">
+            <div class="layer-num">LAYER 3</div>
+            <div class="layer-name">RELATION — Connection</div>
+            <div class="layer-role">The first true manifold. Two independent variables produce a dependent value.
+              Mathematical analog: z = x · y. In code: the core evaluation function. WHERE computation happens — on the
+              surface.</div>
+          </div>
+          <div class="layer-card">
+            <div class="layer-num">LAYER 4</div>
+            <div class="layer-name">FORM — Structure</div>
+            <div class="layer-role">Structure emerges from relation. Non-linearity, harmonics, and complexity appear.
+              Mathematical analog: z = x · y². In code: structured data types, component hierarchies, scene graphs.
+            </div>
+          </div>
+          <div class="layer-card">
+            <div class="layer-num">LAYER 5</div>
+            <div class="layer-name">LIFE — Animation</div>
+            <div class="layer-role">Points begin to move along the surface. Animation, physics, music playback — all are
+              trajectories on manifolds. Mathematical analog: time-parameterized curves on manifold surfaces.</div>
+          </div>
+          <div class="layer-card">
+            <div class="layer-num">LAYER 6</div>
+            <div class="layer-name">MIND — Coherence</div>
+            <div class="layer-role">The system becomes aware of its own state. AI agents walk along gradients.
+              Commentary observes and narrates. Mathematical analog: gradient fields and optimization on manifold
+              surfaces.</div>
+          </div>
+          <div class="layer-card">
+            <div class="layer-num">LAYER 7</div>
+            <div class="layer-name">COMPLETION — The Butterfly</div>
+            <div class="layer-role">The complete system — every substrate, every surface, every coordinate, unified.
+              When Layer 7 completes, it becomes the Layer 1 Spark of the next dimensional spiral. The butterfly
+              emerges.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4 -->
+      <section class="section" id="s4">
+        <h2 class="section-head">§4 — SUBSTRATE ARCHITECTURE: THE DIAMOND PATTERN</h2>
+
+        <h3 class="subsection-head" id="s4-1">4.1 What Is a Substrate?</h3>
+        <p>A substrate is a self-contained computational module that:</p>
+        <ul>
+          <li>Owns a <strong>single domain</strong> (audio, board state, rules, AI, etc.)</li>
+          <li>Evaluates coordinates on shared manifold surfaces</li>
+          <li>Publishes its outputs as coordinates on those surfaces</li>
+          <li>Reads inputs by sampling coordinates published by other substrates</li>
+          <li><strong>NEVER</strong> directly calls another substrate's functions</li>
+          <li><strong>NEVER</strong> passes callbacks, events, or messages to other substrates</li>
+          <li>Has no knowledge of which other substrates exist</li>
+        </ul>
+        <p>A substrate is not a "service," a "component," or a "module" in any traditional software sense. It is a
+          geometric entity that occupies a region of the manifold and communicates exclusively through the surface
+          topology. Its isolation is absolute — if every other substrate were removed from the system, a substrate would
+          still run without error.</p>
+
+        <h3 class="subsection-head" id="s4-2">4.2 The Diamond Communication Pattern</h3>
+        <div class="diamond-diagram">
+          Substrate A Manifold Surface Substrate B
+          │ │ │
+          ├── publishes ─────────→│←──────── reads ──────┤
+          │ │ │
+          ├── reads ←────────────│──────────── publishes─┤
+          │ │ │
+          │ (the surface IS the medium) │
+          │ (no direct connection between A ↔ B) │
+        </div>
+        <p>Substrates write coordinates. Other substrates read coordinates. The surface topology determines what
+          information flows where. There is no dependency injection, no service locator, no observer pattern. There is
+          only the surface.</p>
+
+        <h3 class="subsection-head" id="s4-3">4.3 Substrate Lifecycle</h3>
+        <p>Every substrate follows the same lifecycle, without exception, on every frame:</p>
+        <ol>
+          <li><strong>INITIALIZE</strong> — Set up internal state, register surface coordinates of interest. Happens
+            once at startup.</li>
+          <li><strong>SAMPLE</strong> — Read coordinates from shared surfaces (input phase).</li>
+          <li><strong>EVALUATE</strong> — Process inputs through domain-specific logic.</li>
+          <li><strong>PUBLISH</strong> — Write output coordinates to shared surfaces.</li>
+          <li><strong>RENDER</strong> — If the substrate has visual/audio output, produce it.</li>
+        </ol>
+        <div class="callout">
+          <div class="callout-label">PHASE ORDERING IS INVIOLABLE</div>
+          <p>ALL substrates SAMPLE before ANY substrate EVALUATES. ALL substrates EVALUATE before ANY substrate
+            PUBLISHES. This guarantees frame consistency.</p>
+        </div>
+
+        <h3 class="subsection-head" id="s4-4">4.4 Surface Registry</h3>
+        <p>The Surface Registry is the <strong>only</strong> shared infrastructure in the entire Manifold system. It is
+          a flat dictionary mapping coordinate names to values. It has NO logic — it is pure data.</p>
+        <div class="directive">
+          <div class="directive-label">REGISTRY INVARIANTS</div>
+          <p><strong>Single-Writer:</strong> Only one substrate MAY publish to a given coordinate. Violation SHALL throw
+            an error at registration time.</p>
+          <p><strong>Multi-Reader:</strong> Any number of substrates MAY read any coordinate.</p>
+          <p><strong>No Dependency Graph:</strong> The registry does not know or care about read/write ordering.</p>
+          <p><strong>Frame Consistency:</strong> All reads within a single frame see the same values (double-buffered).
+            A substrate's writes in frame N are not visible to any reader until frame N+1.</p>
+        </div>
+
+        <h3 class="subsection-head" id="s4-5">4.5 Standard Substrate Catalog</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Substrate</th>
+                <th>Domain</th>
+                <th>Publishes</th>
+                <th>Reads</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Board</td>
+                <td>Game board state</td>
+                <td>Hole positions, occupancy, connectivity</td>
+                <td>Theme coordinates, player state</td>
+              </tr>
+              <tr>
+                <td>Rules</td>
+                <td>Move validation</td>
+                <td>Legal moves, turn state, win condition</td>
+                <td>Board state, card state, peg positions</td>
+              </tr>
+              <tr>
+                <td>Peg</td>
+                <td>Piece state</td>
+                <td>Peg positions, animations, collisions</td>
+                <td>Board state, rules validation</td>
+              </tr>
+              <tr>
+                <td>CardDeck</td>
+                <td>Card management</td>
+                <td>Current card, hand contents, deck size</td>
+                <td>Rules state, player turn</td>
+              </tr>
+              <tr>
+                <td>Music</td>
+                <td>Procedural audio</td>
+                <td>Current beat, measure, tempo</td>
+                <td>Theme coordinates, game state</td>
+              </tr>
+              <tr>
+                <td>Audio</td>
+                <td>Sound effects</td>
+                <td>Active sounds, spatial positions</td>
+                <td>Game events (peg moves, cuts, wins)</td>
+              </tr>
+              <tr>
+                <td>AI</td>
+                <td>Computer opponents</td>
+                <td>Chosen move, difficulty state</td>
+                <td>Board state, legal moves, hand contents</td>
+              </tr>
+              <tr>
+                <td>Themes</td>
+                <td>Visual theming</td>
+                <td>Material parameters, colors, textures</td>
+                <td>User preference coordinates</td>
+              </tr>
+              <tr>
+                <td>Input</td>
+                <td>Player controls</td>
+                <td>Selected peg, selected card, camera state</td>
+                <td>Platform detection, device state</td>
+              </tr>
+              <tr>
+                <td>Social</td>
+                <td>Multiplayer/chat</td>
+                <td>Player profiles, messages, guild state</td>
+                <td>Auth state, network state</td>
+              </tr>
+              <tr>
+                <td>Lobby</td>
+                <td>Game rooms</td>
+                <td>Room state, player slots, game config</td>
+                <td>Social state, auth state</td>
+              </tr>
+              <tr>
+                <td>Auth</td>
+                <td>Authentication</td>
+                <td>Session state, user identity</td>
+                <td>Network state</td>
+              </tr>
+              <tr>
+                <td>Commentary</td>
+                <td>Play-by-play</td>
+                <td>Commentary text, speech synthesis</td>
+                <td>Game state, move history</td>
+              </tr>
+              <tr>
+                <td>Crowd</td>
+                <td>Ambient atmosphere</td>
+                <td>Crowd noise parameters, reaction intensity</td>
+                <td>Game state, score state</td>
+              </tr>
+              <tr>
+                <td>Avatar</td>
+                <td>Player representation</td>
+                <td>Avatar render data, customization</td>
+                <td>Auth state, social state</td>
+              </tr>
+              <tr>
+                <td>Render</td>
+                <td>Visual output</td>
+                <td>Frame buffer, post-processing</td>
+                <td>All visual substrate outputs</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 5 -->
+      <section class="section" id="s5">
+        <h2 class="section-head">§5 — IMPLEMENTATION SPECIFICATION</h2>
+
+        <h3 class="subsection-head" id="s5-1">5.1 Language and Runtime</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Layer</th>
+                <th>Technology</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Primary Language</td>
+                <td>JavaScript (ES Modules, strict mode)</td>
+                <td>All application logic, substrate code, and orchestration</td>
+              </tr>
+              <tr>
+                <td>Shader Language</td>
+                <td>GLSL (vertex and fragment shaders)</td>
+                <td>All GPU-side rendering, post-processing, and visual effects</td>
+              </tr>
+              <tr>
+                <td>Graphics API</td>
+                <td>WebGL2</td>
+                <td>3D rendering, PBR materials, post-processing pipeline</td>
+              </tr>
+              <tr>
+                <td>Audio API</td>
+                <td>Web Audio API</td>
+                <td>Procedural synthesis, spatial audio, AudioWorklet DSP</td>
+              </tr>
+              <tr>
+                <td>Network API</td>
+                <td>WebSocket</td>
+                <td>Real-time multiplayer communication</td>
+              </tr>
+              <tr>
+                <td>XR API</td>
+                <td>WebXR</td>
+                <td>VR/AR support for Meta Quest and future headsets</td>
+              </tr>
+              <tr>
+                <td>Future Native</td>
+                <td>Electron, Capacitor, or platform-specific SDKs</td>
+                <td>Commercial release builds for Steam, mobile, and consoles</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="directive">
+          <div class="directive-label">FRAMEWORK PROHIBITION</div>
+          <p>No frameworks. No jQuery. No React. No Angular. No Vue. No Svelte. No Next.js. No libraries of any kind
+            except platform-native APIs. Pure vanilla JavaScript + WebGL2 + Web Audio. <strong>The Manifold IS the
+              framework.</strong></p>
+        </div>
+
+        <h3 class="subsection-head" id="s5-2">5.2 File Structure Convention</h3>
+        <p>Every ButterflyFX project SHALL follow this exact directory structure:</p>
+        <pre>project-root/
+├── index.html              (entry point — single HTML file)
+├── js/
+│   ├── manifold/
+│   │   ├── surface.js      (z=xy, z=xy² evaluation, gradient computation)
+│   │   ├── fibonacci.js    (sequence generation, weighting functions)
+│   │   ├── golden-ratio.js (φ cascades, proportion derivation)
+│   │   ├── dimensions.js   (7-layer helix state machine)
+│   │   └── registry.js     (Surface Registry — coordinate read/write)
+│   ├── substrates/
+│   │   ├── board.substrate.js
+│   │   ├── rules.substrate.js
+│   │   ├── peg.substrate.js
+│   │   ├── cardDeck.substrate.js
+│   │   ├── music.substrate.js
+│   │   ├── audio.substrate.js
+│   │   ├── ai.substrate.js
+│   │   ├── themes.substrate.js
+│   │   ├── input.substrate.js
+│   │   └── ...
+│   ├── input/
+│   │   ├── InputManager.js
+│   │   ├── keyboard.adapter.js
+│   │   ├── gamepad.adapter.js
+│   │   ├── touch.adapter.js
+│   │   └── xr.adapter.js
+│   ├── render/
+│   │   ├── board.renderer.js
+│   │   ├── peg.renderer.js
+│   │   ├── card.renderer.js
+│   │   └── post.renderer.js
+│   └── main.js             (bootstrap, substrate initialization, main loop)
+├── shaders/
+│   ├── pbr.vert.glsl
+│   ├── pbr.frag.glsl
+│   ├── post-bloom.frag.glsl
+│   ├── post-ao.frag.glsl
+│   └── post-dof.frag.glsl
+├── assets/
+│   ├── models/
+│   ├── textures/
+│   └── images/
+└── docs/
+    ├── MANIFOLD_SPEC.md
+    └── GDD.md</pre>
+
+        <h3 class="subsection-head" id="s5-3">5.3 Substrate Class Template</h3>
+        <p>Every substrate MUST follow this exact class structure. The four lifecycle methods (<code>sample</code>,
+          <code>evaluate</code>, <code>publish</code>, <code>render</code>) are the only interface contract.</p>
+        <div class="code-label">// [name].substrate.js</div>
+        <pre>import { Registry } from '../manifold/registry.js';
+import { evaluateSurface } from '../manifold/surface.js';
+
+export class NameSubstrate {
+  constructor(registry) {
+    this.registry = registry;
+    // Declare published coordinates — this substrate is the SOLE writer
+    this.registry.registerPublisher('domain.coordinate.name', this);
+    // Internal state only — no references to other substrates
+    this._inputValue = null;
+    this._outputValue = null;
+  }
+
+  sample() {
+    // Read coordinates from the registry — NEVER call another substrate
+    const value = this.registry.read('other.coordinate.name');
+    // Store locally for the evaluate phase
+    this._inputValue = value;
+  }
+
+  evaluate() {
+    // Domain-specific computation using manifold surface evaluation
+    const z = evaluateSurface(this._inputValue, someOtherParam);
+    this._outputValue = z;
+  }
+
+  publish() {
+    // Write outputs to the registry
+    this.registry.write('domain.coordinate.name', this._outputValue);
+  }
+
+  render(ctx) {
+    // Optional: produce visual/audio output
+    // Only substrates with user-facing output implement this
+  }
+}</pre>
+
+        <h3 class="subsection-head" id="s5-4">5.4 Main Loop Structure</h3>
+        <div class="code-label">// main.js — The heartbeat</div>
+        <pre>import { Registry } from './manifold/registry.js';
+import { BoardSubstrate } from './substrates/board.substrate.js';
+import { RulesSubstrate } from './substrates/rules.substrate.js';
+import { PegSubstrate } from './substrates/peg.substrate.js';
+import { CardDeckSubstrate } from './substrates/cardDeck.substrate.js';
+import { MusicSubstrate } from './substrates/music.substrate.js';
+import { AudioSubstrate } from './substrates/audio.substrate.js';
+import { AISubstrate } from './substrates/ai.substrate.js';
+import { ThemesSubstrate } from './substrates/themes.substrate.js';
+import { InputSubstrate } from './substrates/input.substrate.js';
+
+const registry = new Registry();
+const substrates = [
+  new BoardSubstrate(registry),
+  new RulesSubstrate(registry),
+  new PegSubstrate(registry),
+  new CardDeckSubstrate(registry),
+  new MusicSubstrate(registry),
+  new AudioSubstrate(registry),
+  new AISubstrate(registry),
+  new ThemesSubstrate(registry),
+  new InputSubstrate(registry),
+];
+
+function tick(timestamp) {
+  // Phase 1: SAMPLE — all substrates read from registry
+  for (const s of substrates) s.sample();
+  // Phase 2: EVALUATE — all substrates compute
+  for (const s of substrates) s.evaluate();
+  // Phase 3: PUBLISH — all substrates write to registry
+  for (const s of substrates) s.publish();
+  // Phase 4: Registry double-buffer swap
+  registry.swap();
+  // Phase 5: RENDER — visual/audio substrates produce output
+  for (const s of substrates) s.render(ctx);
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);</pre>
+
+        <h3 class="subsection-head" id="s5-5">5.5 Surface Registry Implementation</h3>
+        <div class="code-label">// registry.js</div>
+        <pre>export class Registry {
+  constructor() {
+    this._front = new Map();       // Current frame (read buffer)
+    this._back  = new Map();       // Next frame (write buffer)
+    this._publishers = new Map();  // coordinate → substrate (single-writer)
+  }
+
+  registerPublisher(coordinate, substrate) {
+    if (this._publishers.has(coordinate)) {
+      throw new Error(
+        `Coordinate "${coordinate}" already has a publisher. Single-writer violated.`
+      );
+    }
+    this._publishers.set(coordinate, substrate);
+    this._front.set(coordinate, null); // Initialize as Null state
+    this._back.set(coordinate, null);
+  }
+
+  read(coordinate) {
+    return this._front.get(coordinate); // Always read from front buffer
+  }
+
+  write(coordinate, value) {
+    this._back.set(coordinate, value);  // Always write to back buffer
+  }
+
+  swap() {
+    [this._front, this._back] = [this._back, this._front];
+    // Copy front to back for next frame's baseline
+    for (const [key, val] of this._front) {
+      this._back.set(key, val);
+    }
+  }
+}</pre>
+
+        <h3 class="subsection-head" id="s5-6">5.6 Surface Evaluation Implementation</h3>
+        <div class="code-label">// surface.js</div>
+        <pre>export function evaluateRelation(x, y) {
+  return x * y;           // z = xy — the Relation surface
+}
+
+export function evaluateForm(x, y) {
+  return x * y * y;       // z = xy² — the Form surface
+}
+
+export function gradientRelation(x, y) {
+  return { dx: y, dy: x }; // ∇f = (y, x)
+}
+
+export function gradientForm(x, y) {
+  return { dx: y * y, dy: 2 * x * y }; // ∇f = (y², 2xy)
+}
+
+export function evaluateSurface(x, y, surfaceType = 'relation') {
+  switch (surfaceType) {
+    case 'relation': return evaluateRelation(x, y);
+    case 'form':     return evaluateForm(x, y);
+    default:         return evaluateRelation(x, y);
+  }
+}
+
+export function gradientSurface(x, y, surfaceType = 'relation') {
+  switch (surfaceType) {
+    case 'relation': return gradientRelation(x, y);
+    case 'form':     return gradientForm(x, y);
+    default:         return gradientRelation(x, y);
+  }
+}
+
+// Gradient magnitude — decision confidence metric
+export function gradientMagnitude(x, y, surfaceType = 'relation') {
+  const g = gradientSurface(x, y, surfaceType);
+  return Math.sqrt(g.dx * g.dx + g.dy * g.dy);
+}</pre>
+      </section>
+
+      <!-- SECTION 6 -->
+      <section class="section" id="s6">
+        <h2 class="section-head">§6 — APPLICATION TO FAST TRACK</h2>
+        <p>Fast Track is the flagship application of the Ken's Games ecosystem — a competitive board game featuring
+          pegs, cards, and strategic movement on a hexagonal board. Every aspect of Fast Track is derived from the
+          Manifold architecture.</p>
+
+        <h3 class="subsection-head">6.1 Board Geometry from φ</h3>
+        <p>All board dimensions cascade from a single base unit <em>R</em> (the board outer radius) through successive
+          powers of the golden ratio:</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Element</th>
+                <th>Formula</th>
+                <th>Derivation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Board outer radius</td>
+                <td>R</td>
+                <td>Base unit (1.0)</td>
+              </tr>
+              <tr>
+                <td>Hole diameter</td>
+                <td>R / φ³</td>
+                <td>R / 4.2360679774…</td>
+              </tr>
+              <tr>
+                <td>Hole spacing (center-to-center)</td>
+                <td>R / φ²</td>
+                <td>R / 2.6180339887…</td>
+              </tr>
+              <tr>
+                <td>Rail width</td>
+                <td>R / φ⁴</td>
+                <td>R / 6.8541019662…</td>
+              </tr>
+              <tr>
+                <td>Safe zone length</td>
+                <td>4 × (R / φ²)</td>
+                <td>4 × R / 2.6180339887…</td>
+              </tr>
+              <tr>
+                <td>Rotational symmetry</td>
+                <td>6-fold (60°)</td>
+                <td>Hexagonal board — each player station identical under rotation</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="subsection-head">6.2 Card Values as Surface Coordinates</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Card</th>
+                <th>Coordinate (x, y)</th>
+                <th>z = x·y</th>
+                <th>Behavior</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Ace</td>
+                <td>(1, 1)</td>
+                <td>1</td>
+                <td>Enter track + draw again</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>(2, 1)</td>
+                <td>2</td>
+                <td>Move 2 spaces forward</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>(3, 1)</td>
+                <td>3</td>
+                <td>Move 3 spaces forward</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>(4, −1)</td>
+                <td>−4</td>
+                <td>Move 4 spaces backward</td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>(5, 1)</td>
+                <td>5</td>
+                <td>Move 5 spaces forward</td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td>(6, 1)</td>
+                <td>6</td>
+                <td>Move 6 spaces forward</td>
+              </tr>
+              <tr>
+                <td>7</td>
+                <td>(7, 1)</td>
+                <td>7</td>
+                <td>Move 7 — splittable: (a,1)+(b,1) where a+b=7</td>
+              </tr>
+              <tr>
+                <td>8–10</td>
+                <td>(n, 1)</td>
+                <td>n</td>
+                <td>Move n spaces forward</td>
+              </tr>
+              <tr>
+                <td>Face (J/Q/K)</td>
+                <td>(1, 1)</td>
+                <td>1</td>
+                <td>Move 1 + draw again + bull's eye exit</td>
+              </tr>
+              <tr>
+                <td>Joker</td>
+                <td>(1, 1)</td>
+                <td>1</td>
+                <td>Wild — enter track + draw again</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="subsection-head">6.3 AI Decision-Making via Gradient Descent</h3>
+        <p>The AI evaluates every legal move by computing a "desirability" score on the Relation surface:</p>
+        <ol>
+          <li>For each legal move, compute coordinates <code>(progress_toward_safe_zone, tactical_advantage)</code></li>
+          <li>Evaluate <code>z = x · y</code> at those coordinates — the z-value is the move's desirability score</li>
+          <li>Select the move with the highest z-value (maximum ascent on the manifold)</li>
+          <li>For team play: evaluate moves for both teammates' pegs and select the globally optimal move</li>
+        </ol>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Difficulty</th>
+                <th>Strategy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Easy</td>
+                <td>Adds Gaussian noise to gradient evaluation — the agent "stumbles" on the surface</td>
+              </tr>
+              <tr>
+                <td>Medium</td>
+                <td>Follows gradients with occasional random perturbation</td>
+              </tr>
+              <tr>
+                <td>Expert</td>
+                <td>Follows exact gradients with full look-ahead — optimal play</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="subsection-head">6.4 Music Generation from Manifolds</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Surface Axis</th>
+                <th>Derived From</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Music intensity (z)</td>
+                <td>z = x·y</td>
+                <td>Product of game progress and game tension</td>
+              </tr>
+              <tr>
+                <td>Game progress (x)</td>
+                <td>x-axis</td>
+                <td>Average peg advancement across all players (0.0 to 1.0)</td>
+              </tr>
+              <tr>
+                <td>Game tension (y)</td>
+                <td>y-axis</td>
+                <td>Number of pegs at risk of being cut (0.0 to 1.0)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Fibonacci-Weighted Instrument Layers:</strong></p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Layer</th>
+                <th>Instrument</th>
+                <th>Fibonacci Weight F(i)</th>
+                <th>Normalized Weight</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Layer 1</td>
+                <td>Bass</td>
+                <td>F(1) = 1</td>
+                <td>1 / Σ F</td>
+              </tr>
+              <tr>
+                <td>Layer 2</td>
+                <td>Drums</td>
+                <td>F(2) = 1</td>
+                <td>1 / Σ F</td>
+              </tr>
+              <tr>
+                <td>Layer 3</td>
+                <td>Melody</td>
+                <td>F(3) = 2</td>
+                <td>2 / Σ F</td>
+              </tr>
+              <tr>
+                <td>Layer 4</td>
+                <td>Harmony</td>
+                <td>F(4) = 3</td>
+                <td>3 / Σ F</td>
+              </tr>
+              <tr>
+                <td>Layer 5</td>
+                <td>Effects</td>
+                <td>F(5) = 5</td>
+                <td>5 / Σ F</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Theme Songs:</strong> Neon Circuit — Cosmic theme (synth-heavy, pulsing bass) · Stellar Drift — Space
+          Ace theme (ethereal pads, wide reverb) · Gladiator March — Colosseum theme (brass-like overtones, martial
+          rhythm) · Coral Groove — Undersea theme (fluid modulation, bubble effects)</p>
+      </section>
+
+      <!-- SECTION 7 -->
+      <section class="section" id="s7">
+        <h2 class="section-head">§7 — APPLICATION TO STARFIGHTER</h2>
+        <p>Starfighter demonstrates the Manifold architecture's versatility — the same substrate system, the same
+          surface evaluations, and the same golden ratio cascades that power a board game also power a real-time space
+          combat game.</p>
+
+        <h3 class="subsection-head">7.1 Flight Physics from Manifold Surfaces</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Physics Parameter</th>
+                <th>Surface Mapping</th>
+                <th>Equation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Acceleration</td>
+                <td>Relation surface z = x · y</td>
+                <td>z = thrust_input (x) × ship_mass_factor (y)</td>
+              </tr>
+              <tr>
+                <td>Velocity vector</td>
+                <td>Point on the Relation surface</td>
+                <td>Current velocity = surface coordinate</td>
+              </tr>
+              <tr>
+                <td>Drag</td>
+                <td>Negative gradient descent</td>
+                <td>Drag force pulls velocity toward the origin along −∇f</td>
+              </tr>
+              <tr>
+                <td>Terminal velocity</td>
+                <td>Equilibrium on the surface</td>
+                <td>Where thrust gradient equals drag gradient</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="subsection-head">7.2 Enemy AI via Gradient Fields</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Enemy Type</th>
+                <th>Gradient Strategy</th>
+                <th>Behavior</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Drone</td>
+                <td>Follows steepest gradient toward player</td>
+                <td>Direct pursuit — simple, relentless, predictable</td>
+              </tr>
+              <tr>
+                <td>Interceptor</td>
+                <td>Follows gradient perpendicular to player approach vector</td>
+                <td>Flanking maneuvers — cuts across the player's path</td>
+              </tr>
+              <tr>
+                <td>Bomber</td>
+                <td>Follows gradient toward baseship, ignoring player</td>
+                <td>Objective-focused — must be intercepted</td>
+              </tr>
+              <tr>
+                <td>Elite</td>
+                <td>Form surface z = x · y² (non-linear pursuit curves)</td>
+                <td>Advanced maneuvering — unpredictable, asymmetric pursuit trajectories</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="subsection-head">7.3 Audio Synthesis (Zero Audio Files)</h3>
+        <div class="callout callout-green">
+          <div class="callout-label">ZERO AUDIO FILES</div>
+          <p>The Manifold architecture mandates that NO pre-recorded audio files are used in any ButterflyFX
+            application. Every sound is synthesized procedurally from coordinates on the Relation and Form manifold
+            surfaces using the Web Audio API. This is a design principle that ensures infinite variation and
+            mathematically consistent audio.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Sound Category</th>
+                <th>Surface</th>
+                <th>Coordinate Mapping</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Weapon sounds</td>
+                <td>Form surface z = x · y²</td>
+                <td>Richer harmonics from quadratic y-dependence</td>
+              </tr>
+              <tr>
+                <td>Engine hum</td>
+                <td>Relation surface z = x · y</td>
+                <td>(thrust_level, rpm) → low-frequency tone</td>
+              </tr>
+              <tr>
+                <td>Shield impacts</td>
+                <td>Form surface z = x · y²</td>
+                <td>Transient spikes — rapid attack, exponential decay</td>
+              </tr>
+              <tr>
+                <td>Ambient space</td>
+                <td>Relation surface z = x · y</td>
+                <td>Low-amplitude, slowly varying coordinates</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="subsection-head">7.4 Radar System</h3>
+        <ul>
+          <li><strong>Projection:</strong> 3D sphere-to-2D disc projection uses manifold coordinate mapping</li>
+          <li><strong>Distance attenuation:</strong> Follows 1/φⁿ curve (golden ratio falloff)</li>
+          <li><strong>Blip intensity:</strong> z-value at (distance, threat_level) on the Relation surface</li>
+        </ul>
+      </section>
+
+      <!-- SECTION 8 -->
+      <section class="section" id="s8">
+        <h2 class="section-head">§8 — THE DIAMOND TOPOLOGY IN DETAIL</h2>
+
+        <h3 class="subsection-head">8.1 Schwartz D-Surface Properties</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Surface Classification</td>
+                <td>Triply periodic minimal surface (TPMS)</td>
+              </tr>
+              <tr>
+                <td>Crystal Symmetry</td>
+                <td>Cubic — space group Fd3̄m (diamond cubic)</td>
+              </tr>
+              <tr>
+                <td>Topology</td>
+                <td>Divides R³ into two congruent, interlocking labyrinths</td>
+              </tr>
+              <tr>
+                <td>Mean Curvature</td>
+                <td>H = 0 everywhere (definition of a minimal surface)</td>
+              </tr>
+              <tr>
+                <td>Gaussian Curvature</td>
+                <td>K ≤ 0 everywhere (saddle-like at every point)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="subsection-head">8.2 Mapping to Software Architecture</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>D-Surface Element</th>
+                <th>Software Mapping</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Labyrinth A</td>
+                <td>Write channel</td>
+                <td>Substrates publish coordinates into this channel</td>
+              </tr>
+              <tr>
+                <td>Labyrinth B</td>
+                <td>Read channel</td>
+                <td>Substrates consume coordinates from this channel</td>
+              </tr>
+              <tr>
+                <td>Surface boundary (A ∩ B)</td>
+                <td>The Registry</td>
+                <td>The shared coordinate space — the only point of contact</td>
+              </tr>
+              <tr>
+                <td>Fd3̄m symmetry</td>
+                <td>Substrate equivalence</td>
+                <td>Every substrate has topologically equivalent access — no privilege</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="subsection-head">8.3 Why "Diamond"?</h3>
+        <ol>
+          <li><strong>Crystallographic:</strong> The Schwartz D-surface has the same symmetry as the diamond crystal
+            structure (Fd3̄m). Maximally symmetric, maximally strong.</li>
+          <li><strong>Clarity:</strong> Diamond is transparent — the architecture is transparent. Every data flow is
+            visible on the surface. There are no hidden channels.</li>
+          <li><strong>Hardness:</strong> Diamond is the hardest natural material. The Diamond pattern produces
+            architectures robust against coupling and resistant to spaghetti.</li>
+          <li><strong>Value:</strong> The architecture itself is the innovation — the intellectual property. The Diamond
+            pattern is the competitive advantage.</li>
+        </ol>
+      </section>
+
+      <!-- SECTION 9 -->
+      <section class="section" id="s9">
+        <h2 class="section-head">§9 — EXTENDING THE MANIFOLD</h2>
+
+        <h3 class="subsection-head">9.1 Adding New Substrates</h3>
+        <p>To add a new substrate to any ButterflyFX application:</p>
+        <ol>
+          <li>Create <code>[name].substrate.js</code> following the exact class template in §5.3</li>
+          <li>Register published coordinates in the constructor via <code>this.registry.registerPublisher()</code></li>
+          <li>Implement <code>sample()</code> to read needed coordinates from the registry</li>
+          <li>Implement <code>evaluate()</code> with domain-specific manifold logic</li>
+          <li>Implement <code>publish()</code> to write output coordinates to the registry</li>
+          <li>Optionally implement <code>render()</code> for visual or audio output</li>
+          <li>Add the substrate instance to the main loop's substrates array in <code>main.js</code></li>
+          <li><strong>No changes needed to any existing substrate</strong> — the Diamond pattern guarantees zero
+            coupling</li>
+        </ol>
+        <div class="callout callout-green">
+          <div class="callout-label">ZERO-COUPLING GUARANTEE</div>
+          <p>Because substrates communicate only through the Registry surface, adding or removing a substrate has
+            <strong>zero impact</strong> on any other substrate's code. The system is extensible by addition, never by
+            modification.</p>
+        </div>
+
+        <h3 class="subsection-head">9.2 Adding New Manifold Surfaces</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Surface Name</th>
+                <th>Equation</th>
+                <th>Gradient ∇f</th>
+                <th>Use Case</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Paraboloid</td>
+                <td>z = x² + y²</td>
+                <td>(2x, 2y)</td>
+                <td>Radial difficulty scaling, distance fields</td>
+              </tr>
+              <tr>
+                <td>Wave Field</td>
+                <td>z = sin(x) · cos(y)</td>
+                <td>(cos(x)·cos(y), −sin(x)·sin(y))</td>
+                <td>Oscillating game states, wave-based audio</td>
+              </tr>
+              <tr>
+                <td>Gaussian Bell</td>
+                <td>z = e^−(x²+y²)</td>
+                <td>(−2x·z, −2y·z)</td>
+                <td>Proximity falloff, attention fields, spatial audio</td>
+              </tr>
+              <tr>
+                <td>Cubic Relation</td>
+                <td>z = x · y³</td>
+                <td>(y³, 3xy²)</td>
+                <td>Extreme non-linear response, boss battle AI</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="subsection-head">9.3 Cross-Application Substrate Sharing</h3>
+        <p>Substrates are portable between applications because they depend only on the Registry interface:</p>
+        <ul>
+          <li>The <strong>Music Substrate</strong> from Fast Track can run unmodified in Starfighter</li>
+          <li>The <strong>AI Substrate's</strong> gradient-walking algorithm works for any domain — board game strategy
+            and space combat use the same mathematical framework</li>
+          <li>The <strong>Auth Substrate</strong> and <strong>Social Substrate</strong> are application-agnostic</li>
+        </ul>
+      </section>
+
+      <!-- SECTION 10 -->
+      <section class="section" id="s10">
+        <h2 class="section-head">§10 — QUALITY STANDARDS AND RENDERING MANDATES</h2>
+        <div class="directive">
+          <div class="directive-label">RENDERING MANDATE</div>
+          <p>"Every frame must be screenshot-worthy." This is not aspirational — it is a rendering mandate for press
+            kits, store listings, and user experience.</p>
+        </div>
+
+        <h3 class="subsection-head">10.1 Hi-Poly Rendering Requirements</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Requirement</th>
+                <th>Specification</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>LOD threshold</td>
+                <td>All objects within 500 units of camera: full hi-poly rendering, no LOD reduction</td>
+              </tr>
+              <tr>
+                <td>Close object poly count</td>
+                <td>Minimum 15,000 triangles per object (pegs, cards, board surface)</td>
+              </tr>
+              <tr>
+                <td>Material system</td>
+                <td>PBR mandatory: albedo, normal, metallic, roughness, ambient occlusion maps</td>
+              </tr>
+              <tr>
+                <td>Subsurface scattering</td>
+                <td>Required for translucent materials (billiard ball pegs, card edges)</td>
+              </tr>
+              <tr>
+                <td>Shadows</td>
+                <td>Real-time shadows with soft penumbra</td>
+              </tr>
+              <tr>
+                <td>Post-processing pipeline</td>
+                <td>Bloom, ambient occlusion, depth of field, anti-aliasing (MSAA 4x minimum)</td>
+              </tr>
+              <tr>
+                <td>Frame rate target (1080p, midrange)</td>
+                <td>60 fps</td>
+              </tr>
+              <tr>
+                <td>Frame rate target (1080p, highend)</td>
+                <td>120 fps</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="subsection-head">10.2 Audio Quality Standards</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Requirement</th>
+                <th>Specification</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Sample rate</td>
+                <td>44,100 Hz minimum</td>
+              </tr>
+              <tr>
+                <td>Synthesis engine</td>
+                <td>Web Audio API with AudioWorklet for custom DSP</td>
+              </tr>
+              <tr>
+                <td>Spatial audio</td>
+                <td>Full 3D sound positioning for all game events</td>
+              </tr>
+              <tr>
+                <td>Music loudness</td>
+                <td>−12 dB LUFS</td>
+              </tr>
+              <tr>
+                <td>Effects peak level</td>
+                <td>−6 dB peak</td>
+              </tr>
+              <tr>
+                <td>Reverb</td>
+                <td>Procedural reverb for environment simulation</td>
+              </tr>
+              <tr>
+                <td>Audio files</td>
+                <td><strong>Zero</strong> — every sound synthesized from manifold coordinates</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 11 -->
+      <section class="section" id="s11">
+        <h2 class="section-head">§11 — COMMERCIAL DEPLOYMENT</h2>
+
+        <h3 class="subsection-head">11.1 Target Platforms</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Platform</th>
+                <th>Build Target</th>
+                <th>SDK</th>
+                <th>Submission</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Web</td>
+                <td>kensgames.com</td>
+                <td>Native browser APIs</td>
+                <td>Self-hosted</td>
+              </tr>
+              <tr>
+                <td>Steam</td>
+                <td>Electron wrapper</td>
+                <td>Steamworks SDK</td>
+                <td>Steam Direct ($100)</td>
+              </tr>
+              <tr>
+                <td>Google Play</td>
+                <td>Capacitor / PWA</td>
+                <td>Play Console</td>
+                <td>$25 registration</td>
+              </tr>
+              <tr>
+                <td>iOS</td>
+                <td>Capacitor</td>
+                <td>Xcode + App Store Connect</td>
+                <td>$99/year Apple Developer</td>
+              </tr>
+              <tr>
+                <td>Xbox</td>
+                <td>UWP / Electron</td>
+                <td>ID@Xbox + Xbox Live</td>
+                <td>ID@Xbox application</td>
+              </tr>
+              <tr>
+                <td>PlayStation</td>
+                <td>Custom</td>
+                <td>PlayStation Partners SDK</td>
+                <td>PS Partners application</td>
+              </tr>
+              <tr>
+                <td>Nintendo Switch</td>
+                <td>Custom</td>
+                <td>Nintendo Dev Portal</td>
+                <td>Developer application</td>
+              </tr>
+              <tr>
+                <td>Meta Quest</td>
+                <td>WebXR or native</td>
+                <td>Quest SDK</td>
+                <td>Quest Store submission</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="subsection-head">11.2 The Manifold as Competitive Advantage</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Architecture Feature</th>
+                <th>Commercial Advantage</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Zero audio files</td>
+                <td>Dramatically smaller download size — faster installs, lower bandwidth costs</td>
+              </tr>
+              <tr>
+                <td>Procedural content</td>
+                <td>Infinite variety from minimal assets — every game session sounds and feels unique</td>
+              </tr>
+              <tr>
+                <td>Substrate architecture</td>
+                <td>Easier maintenance, testing, and extension — new features ship faster, bugs isolate cleanly</td>
+              </tr>
+              <tr>
+                <td>Mathematical foundation</td>
+                <td>Reproducible, deterministic behavior — essential for competitive play, replays, and debugging</td>
+              </tr>
+              <tr>
+                <td>Golden ratio aesthetics</td>
+                <td>Universally pleasing visual proportions — the game "feels right" to players</td>
+              </tr>
+              <tr>
+                <td>Cross-platform substrate portability</td>
+                <td>Write once, deploy everywhere — substrates are platform-agnostic by design</td>
+              </tr>
+              <tr>
+                <td>Original IP</td>
+                <td>The architecture itself is the innovation — defensible, patentable, and unique in the industry</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 12 -->
+      <section class="section" id="s12">
+        <h2 class="section-head">§12 — GLOSSARY OF MANIFOLD TERMS</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Term</th>
+                <th>Definition</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Manifold</strong></td>
+                <td>A mathematical space that locally resembles Euclidean space. In this architecture, the collection of
+                  surfaces upon which all computation is performed.</td>
+              </tr>
+              <tr>
+                <td><strong>Surface</strong></td>
+                <td>A 2-dimensional manifold embedded in 3D space, defined by a function z = f(x, y). The primary
+                  computational primitive. All state, audio, and AI evaluation occurs on surfaces.</td>
+              </tr>
+              <tr>
+                <td><strong>Substrate</strong></td>
+                <td>A self-contained computational module that owns a single domain, publishes output coordinates, and
+                  reads input coordinates from shared manifold surfaces. Substrates NEVER call each other directly.</td>
+              </tr>
+              <tr>
+                <td><strong>Registry</strong></td>
+                <td>The Surface Registry — a flat, double-buffered dictionary mapping coordinate names to values. The
+                  only shared infrastructure. Contains no logic. Enforces single-writer, multi-reader access.</td>
+              </tr>
+              <tr>
+                <td><strong>Coordinate</strong></td>
+                <td>A named value published to or read from the Registry. The atomic unit of inter-substrate
+                  communication. Format: <code>domain.aspect.detail</code>.</td>
+              </tr>
+              <tr>
+                <td><strong>Gradient (∇f)</strong></td>
+                <td>The vector of partial derivatives of a surface at a point, indicating the direction of steepest
+                  ascent. Used by AI agents for decision-making and optimization.</td>
+              </tr>
+              <tr>
+                <td><strong>φ (Phi)</strong></td>
+                <td>The golden ratio: (1 + √5) / 2 = 1.6180339887… The universal proportional constant governing all
+                  Manifold dimensions.</td>
+              </tr>
+              <tr>
+                <td><strong>Diamond Pattern</strong></td>
+                <td>The substrate communication pattern derived from the Schwartz D-surface topology. Substrates
+                  communicate exclusively through the Registry surface — no direct coupling.</td>
+              </tr>
+              <tr>
+                <td><strong>Potential</strong></td>
+                <td>State of a coordinate that exists in mathematical space but has not been evaluated.</td>
+              </tr>
+              <tr>
+                <td><strong>Null</strong></td>
+                <td>State of a coordinate that has been addressed but carries no manifest value.</td>
+              </tr>
+              <tr>
+                <td><strong>Manifest</strong></td>
+                <td>State of a coordinate that has been evaluated and carries a concrete value.</td>
+              </tr>
+              <tr>
+                <td><strong>Dimensional Helix</strong></td>
+                <td>The ButterflyFX 7-layer architecture where each layer contains all lower layers. Layer 7 completion
+                  becomes the Layer 1 Spark of the next spiral.</td>
+              </tr>
+              <tr>
+                <td><strong>Saddle Surface</strong></td>
+                <td>A surface that curves upward in one direction and downward in another. The Relation surface z = x ·
+                  y is a saddle surface (hyperbolic paraboloid).</td>
+              </tr>
+              <tr>
+                <td><strong>Double Buffer</strong></td>
+                <td>The Registry's frame-consistency mechanism: writes go to the back buffer; the front buffer is
+                  swapped in at the end of each frame.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <footer>
+    <p>© 2026 Ken Bingham / Ken's Games. All rights reserved. Proprietary and Confidential.</p>
+    <p>MANIFOLD Diamond Edition — Single Source of Truth for all ButterflyFX-powered applications.</p>
+    <div class="footer-eq">z = x · y &nbsp;·&nbsp; φ = 1.6180339887 &nbsp;·&nbsp; f = 440 × 2^((n−69)/12)</div>
+  </footer>
+
+</body>
+
+</html>

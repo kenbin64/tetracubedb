@@ -1,0 +1,55 @@
+{
+  "entity": "fasttrack",
+  "name": "FastTrack",
+  "tagline": "Classic board game strategy — peg racing with a card-driven twist",
+  "icon": "🏁",
+  "version": "2.1.0",
+  "status": "production",
+  "dimension": {
+    "x": 3,
+    "y": 45,
+    "z": 135,
+    "_note": "z = x*y = 3 players avg * 45 min avg = 135; D4 PLANE on gyroid"
+  },
+  "launch": {
+    "url": "https://kensgames.com/fasttrack/game.html",
+    "params": {
+      "offline": "true",
+      "ai_players": "1",
+      "ai_level": "medium"
+    },
+    "allowBots": true
+  },
+  "setup": {
+    "botOptions": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "musicToggle": true,
+    "sfxToggle": true
+  },
+  "substrates": {
+    "board": "board_manifold.js",
+    "ai": "ai_manifold.js",
+    "audio": "audio_substrate.js",
+    "music": "music_substrate.js",
+    "cards": "card_logic_substrate.js",
+    "moves": "move_generation_substrate.js"
+  },
+  "manifold_bridge": {
+    "entry_var": "window.__MANIFOLD__",
+    "exposes": [
+      "gameState",
+      "playerCount",
+      "roundTime",
+      "score"
+    ]
+  },
+  "source": {
+    "portal": "kensgames.com",
+    "path": "fasttrack/",
+    "manifold": "fasttrack/manifold.game.json"
+  }
+}
