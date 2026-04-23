@@ -30,12 +30,23 @@ mkdir -p "$BINDING_DST"
 [[ -f "$BINDING_SRC" ]] && cp -f "$BINDING_SRC" "$BINDING_DST/" && echo -e "${G}  ✓ better-sqlite3 binding restored${NC}"
 echo -e "${G}  ✓ dependencies updated${NC}"
 
-# Sync landing page to web root
-LANDING_SRC="$(cd "$(dirname "$0")/public" && pwd)/index.html"
+# Sync public web assets to web root
+PUBLIC_SRC="$(cd "$(dirname "$0")/public" && pwd)"
 WEB_ROOT="/var/www/tetracubedb.com/public"
-if [[ -f "$LANDING_SRC" ]] && [[ -d "$WEB_ROOT" ]]; then
-  cp -f "$LANDING_SRC" "$WEB_ROOT/index.html"
+if [[ -d "$PUBLIC_SRC" ]] && [[ -d "$WEB_ROOT" ]]; then
+  cp -f "$PUBLIC_SRC/index.html" "$WEB_ROOT/index.html"
   echo -e "${G}  ✓ landing page synced${NC}"
+  if [[ -f "$PUBLIC_SRC/manifold.app.json" ]]; then
+    cp -f "$PUBLIC_SRC/manifold.app.json" "$WEB_ROOT/manifold.app.json"
+    echo -e "${G}  ✓ manifold.app.json synced${NC}"
+  fi
+  for sub in entities substrate js; do
+    if [[ -d "$PUBLIC_SRC/$sub" ]]; then
+      mkdir -p "$WEB_ROOT/$sub"
+      rsync -a --delete "$PUBLIC_SRC/$sub/" "$WEB_ROOT/$sub/"
+      echo -e "${G}  ✓ $sub/ synced${NC}"
+    fi
+  done
 fi
 
 if $DO_RESTART; then

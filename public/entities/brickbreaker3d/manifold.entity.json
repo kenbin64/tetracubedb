@@ -1,7 +1,7 @@
 {
   "entity": "brickbreaker3d",
   "name": "BrickBreaker 3D",
-  "tagline": "3D brick breaking with golden ratio physics and layered geometry",
+  "tagline": "3D brick breaking on a Three.js stage",
   "icon": "🧱",
   "version": "1.0.0",
   "status": "production",
@@ -13,36 +13,20 @@
   },
   "launch": {
     "url": "https://kensgames.com/brickbreaker3d/game.html",
-    "params": {
-      "offline": "true",
-      "autostart": "1"
-    },
     "allowBots": false
   },
   "setup": {
     "botOptions": [],
-    "musicToggle": true,
-    "sfxToggle": true
+    "musicToggle": false,
+    "sfxToggle": false
   },
   "substrates": {
-    "physics": "brickbreaker_manifold.js",
-    "graphics": "shared:GraphicsSubstrate",
-    "audio": "shared:AudioSubstrate",
-    "game_logic": "shared:GameLogicSubstrate"
-  },
-  "physics": {
-    "model": "golden_ratio_speed",
-    "_note": "Speed boost per brick layer uses golden ratio φ ≈ 1.618"
+    "runtime": "brickbreaker3d.js",
+    "_note": "Standalone Three.js prototype; no external substrates."
   },
   "manifold_bridge": {
-    "entry_var": "window.__MANIFOLD__",
-    "exposes": [
-      "level",
-      "score",
-      "lives",
-      "ballPosition",
-      "brickGrid"
-    ]
+    "entry_var": null,
+    "_note": "Prototype does not export a manifold bridge yet."
   },
   "source": {
     "portal": "kensgames.com",
