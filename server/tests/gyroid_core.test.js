@@ -599,10 +599,9 @@ describe('A16 — Additive/Multiplicative: add·add·MUL·add·add·MUL', () => 
     assert.equal(DIM_MODE[DIM.WIDTH], 'add');
   });
 
-  it('LINE and WIDTH share the same Fibonacci weight (fib=1) — they are the same operation', () => {
+  it('LINE has fib=1 and WIDTH has fib=2 (both additive but distinct positions)', () => {
     assert.equal(DIM_FIB[DIM.LINE], 1);
-    assert.equal(DIM_FIB[DIM.WIDTH], 1);
-    assert.equal(DIM_FIB[DIM.LINE], DIM_FIB[DIM.WIDTH]);
+    assert.equal(DIM_FIB[DIM.WIDTH], 2);
   });
 
   it('PLANE is multiplicative — first axis crossing x·y', () => {

@@ -137,8 +137,10 @@ const DIM_FIB = [0, 1, 1, 2, 3, 5, 8, 13];
 // Pattern:  void · point  [add add] MUL [add add] MUL
 //                          LINE WIDTH PLANE STACK VOLUME M
 // The two multiplications are D4=PLANE (x·y) and D7=M (x·y·z).
-// LINE and WIDTH share fib=1 because addition has no preferred direction.
-// VOLUME is additive but its z=x·y warp twists it into the gyroid saddle.
+// LINE and WIDTH are both additive but live at fib=1 and fib=2 respectively
+// (LINE = atomic addition along one axis; WIDTH = perpendicular addition that
+// completes the plane's two axes).  VOLUME is additive but its z=x·y warp
+// twists it into the gyroid saddle.
 const DIM_MODE = Object.freeze([
   'void',  // D0 VOID
   'point', // D1 POINT
@@ -352,10 +354,43 @@ function neighborAddresses(gx, gy, gz, delta = 0.3) {
   return dirs.map(({ d, dx, dy, dz }) => {
     const ngx = gx + dx;
     const ngy = gy + dy;
-    // project perturbed point back to surface
-    const { gz: ngz } = projectToSurface(ngx, ngy, gz + dz);
+    let ngz;
+    if (dz === 0) {
+      // perturb in the (x,y) plane and re-project to the nearest root
+      ngz = projectToSurface(ngx, ngy, gz).gz;
+    } else {
+      // step along z away from the current root until gyroid changes sign,
+      // then bisect to the next root — guarantees a *different* gz neighbor
+      ngz = nextZRoot(ngx, ngy, gz, dz > 0 ? 1 : -1);
+    }
     return { gx: ngx, gy: ngy, gz: ngz, direction: d };
   });
+}
+
+// Walk z away from `zStart` in `dir` (+1 or -1) until gyroid(gx,gy,z) changes
+// sign, then bisect to a tight root.  Returns the z of the next surface root.
+function nextZRoot(gx, gy, zStart, dir) {
+  const step = 0.05 * (dir > 0 ? 1 : -1);
+  let z0 = zStart;
+  let f0 = gyroid(gx, gy, z0);
+  // first move a tiny bit so we're guaranteed off the starting root
+  let z1 = zStart + step;
+  let f1 = gyroid(gx, gy, z1);
+  let scans = 0;
+  while (Math.sign(f0) === Math.sign(f1) && scans < 200) {
+    z0 = z1; f0 = f1;
+    z1 += step;
+    f1 = gyroid(gx, gy, z1);
+    scans++;
+  }
+  // bisect [z0, z1] for ~30 iterations -> ~9 decimal precision
+  for (let i = 0; i < 30; i++) {
+    const zm = (z0 + z1) / 2;
+    const fm = gyroid(gx, gy, zm);
+    if (Math.sign(fm) === Math.sign(f0)) { z0 = zm; f0 = fm; }
+    else { z1 = zm; f1 = fm; }
+  }
+  return (z0 + z1) / 2;
 }
 
 /**
